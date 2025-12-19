@@ -1,0 +1,9 @@
+steps of making of Mastie Updates :-
+------------------------------------
+
+1. Create the project
+2. Create the Django admin ( creating the superuser )
+3. Implementing the template
+4. Design Homepage & Configure Static Files (use get bootstrap.com)
+5. Setup Git with Gitignore (gitignore.io)
+6. 

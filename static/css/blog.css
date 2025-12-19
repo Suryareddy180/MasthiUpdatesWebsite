@@ -1,0 +1,181 @@
+/* =========================
+   GLOBAL
+========================= */
+body {
+    font-family: "Playfair Display", serif;
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    color: #ffc107;
+}
+
+/* =========================
+   HEADER
+========================= */
+.blog-header {
+    border-bottom: 1px solid #e5e5e5;
+    overflow: hidden;
+}
+
+.blog-header-logo {
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: #212529;
+}
+
+/* LOGO FIX */
+.site-logo {
+    height: 45px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+.nav-scroller {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.nav-scroller .nav a {
+    font-weight: 600;
+}
+
+/* =========================
+   HERO
+========================= */
+.hero {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.hero > div {
+    position: relative;
+    z-index: 1;
+}
+
+/* =========================
+   CARDS
+========================= */
+.card {
+    border-radius: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 25px rgba(0,0,0,0.15);
+}
+
+/* =========================
+   BLOG
+========================= */
+.blog-post-title {
+    font-weight: 800;
+}
+
+.blog-post-meta {
+    color: #6c757d;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+.blog-sidebar {
+    border-left: 1px solid #e5e5e5;
+    padding-left: 20px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn-warning,
+.btn-outline-secondary {
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+/* =========================
+   FOOTER
+========================= */
+.blog-footer {
+    background-color: #000;
+    color: #fff;
+    padding: 2rem 0;
+    margin-top: 4rem;
+}
+
+.blog-footer a {
+    color: #ffc107;
+}
+
+/* =========================
+   DARK MODE
+========================= */
+.dark-mode {
+    background-color: #121212;
+    color: #eaeaea;
+}
+
+.dark-mode .blog-header,
+.dark-mode .nav-scroller {
+    background-color: #1e1e1e;
+    border-color: #333;
+}
+
+.dark-mode .blog-header-logo,
+.dark-mode .nav a {
+    color: #eaeaea !important;
+}
+
+.dark-mode .card,
+.dark-mode .bg-light {
+    background-color: #1f1f1f !important;
+    color: #eaeaea;
+}
+
+.dark-mode .blog-sidebar {
+    border-color: #333;
+}
+
+.dark-mode .hero::before {
+    background: rgba(0, 0, 0, 0.75);
+}
+
+.dark-mode .btn-outline-secondary {
+    color: #eaeaea;
+    border-color: #666;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+    .blog-sidebar {
+        border-left: none;
+        padding-left: 0;
+        margin-top: 2rem;
+    }
+
+    .blog-header-logo {
+        font-size: 1.3rem;
+    }
+}
