@@ -6,4 +6,9 @@ steps of making of Mastie Updates :-
 3. Implementing the template
 4. Design Homepage & Configure Static Files (use get bootstrap.com)
 5. Setup Git with Gitignore (gitignore.io)
-6. 
+6. Category Model => posts are assigned to certain category since we use category model for that
+7. Media files configuraton
+8. Blog Model
+9. Prepopulate Slugs
+10. Admin Table List Display
+11.
