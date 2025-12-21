@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masthi Updates</title>
+
+    <!-- Bootstrap -->
+    <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static 'css/blog.css' %}" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ================= HEADER ================= -->
+    <header class="blog-header py-3 mb-3">
+        <div class="row align-items-center justify-content-between">
+
+            <!-- LOGO -->
+            <div class="col-md-8">
+                <a href="{% url 'home' %}" class="blog-header-logo d-flex align-items-center">
+                    <img src="{% static 'images/logo.png' %}" class="site-logo mr-2" alt="Masthi Updates Logo">
+                    <span>MASTHI UPDATES</span>
+                </a>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="col-md-4 d-flex justify-content-end align-items-center">
+                <button id="themeToggle" class="btn btn-sm btn-light mr-2">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+
+                <a class="btn btn-sm btn-warning mr-2">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Login
+                </a>
+
+                <a class="btn btn-sm btn-outline-secondary">
+                    <i class="fa-solid fa-user-plus"></i> Register
+                </a>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- ================= NAVBAR ================= -->
+    {% block navbar %}
+    {% if categories %}
+    <div class="nav-scroller mb-4">
+        <nav class="nav d-flex justify-content-between">
+            {% for cat in categories %}
+                <a href="{% url "posts_by_category" cat.id %}">
+                    <i class="fa-solid fa-clapperboard"></i> {{ cat.category_name }}
+                </a>
+            {% endfor %}
+        </nav>
+    </div>
+    {% endif %}
+    {% endblock %}
+
+    <!-- ================= MAIN CONTENT ================= -->
+    {% block content %}{% endblock %}
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="blog-footer text-center mt-5">
+    <p class="mb-0">
+        <i class="fa-solid fa-heart"></i>
+        Masthi Updates · Built with Passion
+    </p>
+</footer>
+
+<!-- ================= THEME TOGGLE SCRIPT ================= -->
+<script>
+    const toggleBtn = document.getElementById("themeToggle");
+
+    // Load theme from localStorage
+    if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark-mode");
+        toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+    }
+
+    toggleBtn.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+
+        if (document.body.classList.contains("dark-mode")) {
+            localStorage.setItem("theme", "dark");
+            toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        } else {
+            localStorage.setItem("theme", "light");
+            toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        }
+    });
+</script>
+
+</body>
+</html>

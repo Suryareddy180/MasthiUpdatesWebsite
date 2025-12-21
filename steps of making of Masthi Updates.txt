@@ -7,8 +7,20 @@ steps of making of Mastie Updates :-
 4. Design Homepage & Configure Static Files (use get bootstrap.com)
 5. Setup Git with Gitignore (gitignore.io)
 6. Category Model => posts are assigned to certain category since we use category model for that
-7. Media files configuraton
+7. Media files configuration
 8. Blog Model
 9. Prepopulate Slugs
 10. Admin Table List Display
-11.
+11. Git Push
+12. Add Demo Categories And Blog Posts
+13 Display Categories On The HomePage
+14.Display Featured Posts on the HomePage
+15. Display Recent Articles
+16. ForeignKey Relationships ( A Category can be associated with MANY Blog posts , but a Blog post can only have ONE Category object.)
+17. Posts By Category
+18. Posts By Category Layout & Try Except Block
+19. 404 Custom Error Page
+20. Template Inheritance
+21. Context Processors ( It is a Python function that injects variables into the template context globally.)
+22. Linking Posts by Category URL.
+23.Git Push
