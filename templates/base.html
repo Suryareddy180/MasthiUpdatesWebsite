@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,88 +23,173 @@
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <!-- ================= HEADER ================= -->
-    <header class="blog-header py-3 mb-3">
-        <div class="row align-items-center justify-content-between">
+        <!-- ================= HEADER ================= -->
+        <header class="blog-header py-2 py-md-3 mb-3">
+            <div class="row align-items-center header-row">
 
-            <!-- LOGO -->
-            <div class="col-md-8">
-                <a href="{% url 'home' %}" class="blog-header-logo d-flex align-items-center">
-                    <img src="{% static 'images/logo.png' %}" class="site-logo mr-2" alt="Masthi Updates Logo">
-                    <span>MASTHI UPDATES</span>
+                <!-- Logo -->
+                <div class="col-6 col-sm-4 col-md-3">
+                    <a href="{% url 'home' %}" class="blog-header-logo">
+                        <img src="{% static 'images/logo.png' %}" class="site-logo" alt="Masthi Updates Logo">
+                        <span class="brand-text">MASTHI UPDATES</span>
+                    </a>
+                </div>
+
+                <!-- SEARCH (center on md+) -->
+                <div class="col-md-5 d-none d-md-block">
+                    <form action="{% url 'search' %}" method="get" class="header-search-form">
+                        <div class="header-search">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            <input type="text" class="search-input" name="keyword"
+                                placeholder="Search movies, news, reviews…">
+                            <button type="submit" class="search-button">
+                                <i class="fa-solid fa-magnifying-glass"></i> Go!
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="col-6 col-sm-8 col-md-4 d-flex justify-content-end align-items-center gap-2">
+                    <!-- Theme Toggle (always visible) -->
+                    <button id="themeToggle" class="btn btn-sm btn-light">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+
+                    <!-- Search icon for mobile (opens search) -->
+                    <button class="btn btn-sm btn-light d-md-none" id="mobileSearchToggle">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+
+                    <!-- Login (visible on sm+) -->
+                    <a href="#" class="btn btn-sm btn-warning d-none d-sm-inline-flex align-items-center">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        <span class="d-none d-lg-inline ms-1">Login</span>
+                    </a>
+
+                    <!-- Register (visible on lg+) -->
+                    <a href="#" class="btn btn-sm btn-outline-secondary d-none d-lg-inline-flex align-items-center">
+                        <i class="fa-solid fa-user-plus"></i>
+                        <span class="ms-1">Register</span>
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Mobile Search (expandable) -->
+            <div class="row mt-2 d-md-none" id="mobileSearchRow" style="display: none !important;">
+                <div class="col-12">
+                    <form action="{% url 'search' %}" method="get" class="header-search-form">
+                        <div class="header-search">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            <input type="text" class="search-input" name="keyword" placeholder="Search…">
+                            <button type="submit" class="search-button">
+                                <i class="fa-solid fa-magnifying-glass"></i> Go!
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </header>
+
+        <!-- ================= CATEGORIES ================= -->
+        {% if categories %}
+        <div class="nav-scroller mb-4">
+            <nav class="nav flex-wrap justify-content-center justify-content-md-between">
+                {% for cat in categories %}
+                <a href="{% url 'posts_by_category' cat.id %}">
+                    <i class="fa-solid fa-clapperboard"></i>
+                    {{ cat.category_name }}
+                </a>
+                {% endfor %}
+            </nav>
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+
+    </div>
+
+    <!-- ================= FOOTER (STATIC FOLLOW US) ================= -->
+    <footer class="blog-footer">
+        <div class="footer-inner">
+
+            <h4 class="footer-title">
+                Masthi Updates
+                <span class="footer-underline"></span>
+            </h4>
+
+            <!-- FOLLOW US (STATIC) -->
+            <div class="footer-socials">
+                <a href="https://www.instagram.com/masthi__updates" target="_blank" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+
+                <a href="https://youtube.com/@cine_muchatluu" target="_blank" aria-label="YouTube">
+                    <i class="fa-brands fa-youtube"></i>
+                </a>
+
+                <a href="https://x.com/cine_muchatlu" target="_blank" aria-label="X (Twitter)">
+                    <i class="fa-brands fa-x-twitter"></i>
                 </a>
             </div>
 
-            <!-- ACTIONS -->
-            <div class="col-md-4 d-flex justify-content-end align-items-center">
-                <button id="themeToggle" class="btn btn-sm btn-light mr-2">
-                    <i class="fa-solid fa-moon"></i>
-                </button>
-
-                <a class="btn btn-sm btn-warning mr-2">
-                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Login
-                </a>
-
-                <a class="btn btn-sm btn-outline-secondary">
-                    <i class="fa-solid fa-user-plus"></i> Register
-                </a>
-            </div>
+            <p class="footer-copy">
+                © <span id="year"></span> Masthi Updates · Built with
+                <i class="fa-solid fa-heart"></i> for Cinema Lovers 🎬
+            </p>
 
         </div>
-    </header>
 
-    <!-- ================= NAVBAR ================= -->
-    {% block navbar %}
-    {% if categories %}
-    <div class="nav-scroller mb-4">
-        <nav class="nav d-flex justify-content-between">
-            {% for cat in categories %}
-                <a href="{% url "posts_by_category" cat.id %}">
-                    <i class="fa-solid fa-clapperboard"></i> {{ cat.category_name }}
-                </a>
-            {% endfor %}
-        </nav>
-    </div>
-    {% endif %}
-    {% endblock %}
+        <div class="footer-grain"></div>
+    </footer>
 
-    <!-- ================= MAIN CONTENT ================= -->
-    {% block content %}{% endblock %}
+    <!-- ================= SCRIPTS ================= -->
+    <script>
+        // Theme Toggle
+        const toggleBtn = document.getElementById("themeToggle");
+        const body = document.body;
 
-</div>
-
-<!-- ================= FOOTER ================= -->
-<footer class="blog-footer text-center mt-5">
-    <p class="mb-0">
-        <i class="fa-solid fa-heart"></i>
-        Masthi Updates · Built with Passion
-    </p>
-</footer>
-
-<!-- ================= THEME TOGGLE SCRIPT ================= -->
-<script>
-    const toggleBtn = document.getElementById("themeToggle");
-
-    // Load theme from localStorage
-    if (localStorage.getItem("theme") === "dark") {
-        document.body.classList.add("dark-mode");
-        toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-    }
-
-    toggleBtn.addEventListener("click", () => {
-        document.body.classList.toggle("dark-mode");
-
-        if (document.body.classList.contains("dark-mode")) {
-            localStorage.setItem("theme", "dark");
+        const savedTheme = localStorage.getItem("theme") || "light";
+        if (savedTheme === "dark") {
+            body.classList.add("dark-mode");
             toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-        } else {
-            localStorage.setItem("theme", "light");
-            toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
         }
-    });
-</script>
+
+        toggleBtn.addEventListener("click", () => {
+            body.classList.toggle("dark-mode");
+            localStorage.setItem(
+                "theme",
+                body.classList.contains("dark-mode") ? "dark" : "light"
+            );
+            toggleBtn.innerHTML = body.classList.contains("dark-mode")
+                ? '<i class="fa-solid fa-sun"></i>'
+                : '<i class="fa-solid fa-moon"></i>';
+        });
+
+        // Mobile Search Toggle
+        const mobileSearchToggle = document.getElementById("mobileSearchToggle");
+        const mobileSearchRow = document.getElementById("mobileSearchRow");
+
+        if (mobileSearchToggle && mobileSearchRow) {
+            mobileSearchToggle.addEventListener("click", () => {
+                if (mobileSearchRow.style.display === "none !important" ||
+                    mobileSearchRow.style.display === "none" ||
+                    !mobileSearchRow.style.display) {
+                    mobileSearchRow.style.display = "flex";
+                    mobileSearchRow.querySelector(".search-input").focus();
+                } else {
+                    mobileSearchRow.style.display = "none";
+                }
+            });
+        }
+
+        // Year in footer
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
 
 </body>
+
 </html>

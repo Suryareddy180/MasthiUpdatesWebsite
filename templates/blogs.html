@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+
+    <div class="row gx-5">
+
+        <!-- ================= MAIN ARTICLE ================= -->
+        <main class="col-lg-8">
+
+            <article class="blog-post">
+
+                <!-- TITLE -->
+                <h1 class="fw-bold mb-3">
+                    {{ single_post.title }}
+                </h1>
+
+                <!-- META -->
+                <div class="post-meta mb-4">
+                    <span>{{ single_post.created_at|date:"F d, Y" }}</span>
+                    <span class="dot">•</span>
+                    <span>{{ single_post.author }}</span>
+                    <span class="dot">•</span>
+                    <a href="{% url 'posts_by_category' single_post.category.id %}"
+                       class="post-category">
+                        {{ single_post.category }}
+                    </a>
+                </div>
+
+                <!-- FEATURE IMAGE -->
+                {% if single_post.feature_image %}
+                <div class="post-image mb-4">
+                    <img src="{{ single_post.feature_image.url }}"
+                         alt="{{ single_post.title }}">
+                </div>
+                {% endif %}
+
+                <!-- SHORT DESCRIPTION -->
+                {% if single_post.short_description %}
+                <p class="post-intro">
+                    {{ single_post.short_description }}
+                </p>
+                {% endif %}
+
+                <!-- CONTENT -->
+                <div class="post-content">
+                    {{ single_post.content|safe }}
+                </div>
+
+                <!-- SHARE -->
+                <div class="share-box mt-5">
+                    <span class="share-label">Share</span>
+
+                    <a href="https://wa.me/?text={{ single_post.title }} {{ request.build_absolute_uri }}"
+                       target="_blank"
+                       class="share whatsapp">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+
+                    <a href="https://x.com/intent/tweet?text={{ single_post.title }}&url={{ request.build_absolute_uri }}"
+                       target="_blank"
+                       class="share twitter">
+                        <i class="fa-brands fa-x-twitter"></i>
+                    </a>
+
+                    <a href="https://www.instagram.com/"
+                       target="_blank"
+                       class="share instagram"
+                       title="Copy link and share on Instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                </div>
+
+            </article>
+
+        </main>
+
+        <!-- ================= SIDEBAR ================= -->
+        <aside class="col-lg-4">
+
+            
+
+            <!-- CATEGORIES -->
+            {% if categories %}
+            <div class="sidebar-box">
+                <h6 class="sidebar-title">Categories</h6>
+                <ul class="category-list">
+                    {% for category in categories %}
+                    <li>
+                        <a href="{% url 'posts_by_category' category.id %}">
+                            {{ category.category_name }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <!-- FOLLOW -->
+            <div class="sidebar-box text-center">
+                <h6 class="sidebar-title">Follow Masthi Updates</h6>
+                <div class="follow-row">
+
+                    <a href="https://www.instagram.com/masthi__updates" target="_blank">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+
+                    <a href="https://youtube.com/@cine_muchatluu" target="_blank">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+
+                    <a href="https://x.com/cine_muchatlu" target="_blank">
+                        <i class="fa-brands fa-x-twitter"></i>
+                    </a>
+
+                </div>
+            </div>
+
+        </aside>
+
+    </div>
+</div>
+{% endblock %}

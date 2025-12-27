@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>404 | Page Not Found – Masthi Updates</title>
@@ -20,14 +21,22 @@
     <link href="{% static 'css/blog.css' %}" rel="stylesheet">
 
     <style>
-        body {
-            background: radial-gradient(circle at top, #1a1a1a, #000);
-            color: #fff;
-            height: 100vh;
+        /* Light mode (default) */
+        .error-page {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #212529;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        /* Dark mode */
+        .dark-mode .error-page {
+            background: radial-gradient(circle at top, #1a1a2e, #0f0f0f);
+            color: #fff;
         }
 
         .error-box {
@@ -40,6 +49,7 @@
             font-weight: 900;
             color: #ffc107;
             letter-spacing: 5px;
+            text-shadow: 0 0 30px rgba(255, 193, 7, 0.3);
         }
 
         .error-title {
@@ -49,8 +59,12 @@
         }
 
         .error-text {
-            color: #ccc;
+            color: #666;
             margin-bottom: 30px;
+        }
+
+        .dark-mode .error-text {
+            color: #ccc;
         }
 
         .error-img {
@@ -63,41 +77,110 @@
             padding: 10px 30px;
             font-weight: 700;
         }
+
+        .btn-outline-secondary {
+            border-radius: 30px;
+            padding: 10px 30px;
+        }
+
+        .dark-mode .btn-outline-secondary {
+            border-color: #666;
+            color: #ccc;
+        }
+
+        .dark-mode .btn-outline-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #ffc107;
+            color: #ffc107;
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .theme-toggle .btn {
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dark-mode .theme-toggle .btn {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
     </style>
 </head>
 
 <body>
 
-<div class="error-box">
-
-    <div class="error-code">404</div>
-
-    <h1 class="error-title">
-        <i class="fa-solid fa-film"></i> Scene Not Found
-    </h1>
-
-    <p class="error-text">
-        Oops! The page you’re looking for doesn’t exist or has been removed.
-        Looks like this scene was cut from the final edit 🎬
-    </p>
-
-{#    <!-- IMAGE -->#}
-{#    <img src="{% static 'images/404.png' %}"#}
-{#         alt="404 Page Not Found"#}
-{#         class="img-fluid error-img">#}
-
-    <!-- ACTION BUTTONS -->
-    <div class="mt-4">
-        <a href="{% url 'home' %}" class="btn btn-warning mr-2">
-            <i class="fa-solid fa-house"></i> Go Home
-        </a>
-
-        <a href="javascript:history.back()" class="btn btn-outline-secondary">
-            <i class="fa-solid fa-arrow-left"></i> Go Back
-        </a>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button id="themeToggle" class="btn btn-sm btn-light">
+            <i class="fa-solid fa-moon"></i>
+        </button>
     </div>
 
-</div>
+    <div class="error-page">
+        <div class="error-box">
+
+            <div class="error-code">404</div>
+
+            <h1 class="error-title">
+                <i class="fa-solid fa-film"></i> Scene Not Found
+            </h1>
+
+            <p class="error-text">
+                Oops! The page you're looking for doesn't exist or has been removed.
+                Looks like this scene was cut from the final edit 🎬
+            </p>
+
+            <!-- ACTION BUTTONS -->
+            <div class="mt-4">
+                <a href="{% url 'home' %}" class="btn btn-warning mr-2">
+                    <i class="fa-solid fa-house"></i> Go Home
+                </a>
+
+                <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                    <i class="fa-solid fa-arrow-left"></i> Go Back
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Theme Toggle Script -->
+    <script>
+        const toggleBtn = document.getElementById("themeToggle");
+        const body = document.body;
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem("theme") || "light";
+        if (savedTheme === "dark") {
+            body.classList.add("dark-mode");
+            toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        }
+
+        // Toggle theme on click
+        toggleBtn.addEventListener("click", () => {
+            body.classList.toggle("dark-mode");
+            localStorage.setItem(
+                "theme",
+                body.classList.contains("dark-mode") ? "dark" : "light"
+            );
+            toggleBtn.innerHTML = body.classList.contains("dark-mode")
+                ? '<i class="fa-solid fa-sun"></i>'
+                : '<i class="fa-solid fa-moon"></i>';
+        });
+    </script>
 
 </body>
+
 </html>

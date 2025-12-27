@@ -24,3 +24,8 @@ steps of making of Mastie Updates :-
 21. Context Processors ( It is a Python function that injects variables into the template context globally.)
 22. Linking Posts by Category URL.
 23.Git Push
+24. Single Blog page Setup
+25. Single Blog page Final
+26.Building "About Us" and Social Links" Features
+27. Search Feature
+28.
