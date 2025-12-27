@@ -1,34 +1,99 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!-- ================= FEATURED POSTS ================= -->
-<h3 class="mb-4 text-warning text-decoration-none">
-    <i class="fa-solid fa-magnifying-glass"></i> Search Results for "{{keyword}}"
-</h3>
+<div class="search-results-page">
 
-<div class="row mb-4">
-    {% if posts %}
-    {% for post in posts %}
-    <div class="col-md-6 mb-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <h4><a href="{% url 'blogs' post.slug %}" class="text-decoration-none text-warning">{{ post.title }}</a>
-                </h4>
-                <small class="d-block mb-2">
-                    <i class="fa-regular fa-clock"></i>
-                    {{ post.created_at|timesince }} ago ·
-                    <i class="fa-solid fa-user"></i> {{ post.author }}
-                </small>
-                <p>
-                    {{ post.short_description|truncatewords:25 }}
-                </p>
+    <!-- Search Header -->
+    <div class="search-header mb-4">
+        <h3 class="section-title">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            {% if keyword %}
+            Search Results for "{{ keyword }}"
+            {% else %}
+            Search
+            {% endif %}
+        </h3>
+        {% if posts %}
+        <p class="results-count">
+            <span class="badge bg-warning text-dark">{{ posts|length }}</span>
+            result{{ posts|length|pluralize }} found
+        </p>
+        {% endif %}
+    </div>
+
+    <!-- Inline Search Form -->
+    <div class="search-form-inline mb-5">
+        <form action="{% url 'search' %}" method="get" class="header-search-form">
+            <div class="header-search">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" class="search-input" name="keyword" value="{{ keyword }}"
+                    placeholder="Search movies, news, reviews…">
+                <button type="submit" class="search-button">
+                    <i class="fa-solid fa-magnifying-glass"></i> Go!
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Results Grid -->
+    <div class="row">
+        {% if posts %}
+        {% for post in posts %}
+        <div class="col-lg-6 col-md-6 mb-4">
+            <div class="card h-100 post-card">
+                {% if post.feature_image %}
+                <div class="card-img-wrapper">
+                    <img src="{{ post.feature_image.url }}" class="card-img-top" alt="{{ post.title }}">
+                    <div class="card-img-overlay-gradient"></div>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="{% url 'blogs' post.slug %}">{{ post.title }}</a>
+                    </h4>
+                    <div class="post-meta mb-2">
+                        <span><i class="fa-regular fa-clock"></i> {{ post.created_at|timesince }} ago</span>
+                        <span class="dot">•</span>
+                        <span><i class="fa-solid fa-user"></i> {{ post.author }}</span>
+                        {% if post.category %}
+                        <span class="dot">•</span>
+                        <a href="{% url 'posts_by_category' post.category.id %}" class="post-category">
+                            {{ post.category.category_name }}
+                        </a>
+                        {% endif %}
+                    </div>
+                    <p class="card-text">{{ post.short_description|truncatewords:20 }}</p>
+                    <a href="{% url 'blogs' post.slug %}" class="btn btn-sm btn-outline-warning">
+                        Read More <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
         </div>
+        {% endfor %}
+        {% else %}
+        <!-- No Results State -->
+        <div class="col-12">
+            <div class="no-results-box text-center py-5">
+                {% if keyword %}
+                <div class="no-results-icon mb-4">
+                    <i class="fa-solid fa-face-sad-tear"></i>
+                </div>
+                <h4>No results found for "{{ keyword }}"</h4>
+                <p class="text-muted">Try searching with different keywords or browse our categories above.</p>
+                {% else %}
+                <div class="no-results-icon mb-4">
+                    <i class="fa-solid fa-search"></i>
+                </div>
+                <h4>Start your search</h4>
+                <p class="text-muted">Enter keywords above to find movies, news, and reviews.</p>
+                {% endif %}
+                <a href="{% url 'home' %}" class="btn btn-warning mt-3">
+                    <i class="fa-solid fa-home"></i> Browse Home
+                </a>
+            </div>
+        </div>
+        {% endif %}
     </div>
-    {% endfor %}
-    {% else %}
-    <p> NO POSTS FOUND!!!</p>
-    {% endif %}
-</div>
 
+</div>
 {% endblock %}

@@ -2,74 +2,129 @@
 {% load static %}
 
 {% block content %}
-<div class="container my-5">
+<div class="blog-detail-page my-4">
+
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-nav mb-4">
+        <a href="{% url 'home' %}" class="breadcrumb-link">
+            <i class="fa-solid fa-home"></i> Home
+        </a>
+        <span class="breadcrumb-separator">/</span>
+        {% if single_post.category %}
+        <a href="{% url 'posts_by_category' single_post.category.id %}" class="breadcrumb-link">
+            {{ single_post.category }}
+        </a>
+        <span class="breadcrumb-separator">/</span>
+        {% endif %}
+        <span class="breadcrumb-current">{{ single_post.title|truncatewords:5 }}</span>
+    </nav>
 
     <div class="row gx-5">
 
         <!-- ================= MAIN ARTICLE ================= -->
         <main class="col-lg-8">
 
-            <article class="blog-post">
+            <article class="blog-post-article">
+
+                <!-- Category Badge -->
+                {% if single_post.category %}
+                <a href="{% url 'posts_by_category' single_post.category.id %}" class="category-badge mb-3">
+                    <i class="fa-solid fa-tag"></i> {{ single_post.category }}
+                </a>
+                {% endif %}
 
                 <!-- TITLE -->
-                <h1 class="fw-bold mb-3">
+                <h1 class="blog-title">
                     {{ single_post.title }}
                 </h1>
 
-                <!-- META -->
-                <div class="post-meta mb-4">
-                    <span>{{ single_post.created_at|date:"F d, Y" }}</span>
-                    <span class="dot">•</span>
-                    <span>{{ single_post.author }}</span>
-                    <span class="dot">•</span>
-                    <a href="{% url 'posts_by_category' single_post.category.id %}"
-                       class="post-category">
-                        {{ single_post.category }}
-                    </a>
+                <!-- META BAR -->
+                <div class="meta-bar mb-4">
+                    <div class="meta-item">
+                        <i class="fa-regular fa-calendar"></i>
+                        <span>{{ single_post.created_at|date:"F d, Y" }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fa-solid fa-user"></i>
+                        <span>{{ single_post.author }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fa-regular fa-clock"></i>
+                        <span>{{ single_post.content|wordcount|divisibleby:200|add:1 }} min read</span>
+                    </div>
                 </div>
 
                 <!-- FEATURE IMAGE -->
                 {% if single_post.feature_image %}
-                <div class="post-image mb-4">
-                    <img src="{{ single_post.feature_image.url }}"
-                         alt="{{ single_post.title }}">
+                <div class="featured-image-wrapper mb-4">
+                    <img src="{{ single_post.feature_image.url }}" alt="{{ single_post.title }}" class="featured-image">
                 </div>
                 {% endif %}
 
-                <!-- SHORT DESCRIPTION -->
+                <!-- SHORT DESCRIPTION (Lead) -->
                 {% if single_post.short_description %}
-                <p class="post-intro">
-                    {{ single_post.short_description }}
-                </p>
+                <div class="lead-text mb-4">
+                    <p>{{ single_post.short_description }}</p>
+                </div>
                 {% endif %}
 
                 <!-- CONTENT -->
-                <div class="post-content">
+                <div class="article-content">
                     {{ single_post.content|safe }}
                 </div>
 
-                <!-- SHARE -->
-                <div class="share-box mt-5">
-                    <span class="share-label">Share</span>
-
-                    <a href="https://wa.me/?text={{ single_post.title }} {{ request.build_absolute_uri }}"
-                       target="_blank"
-                       class="share whatsapp">
-                        <i class="fa-brands fa-whatsapp"></i>
+                <!-- TAGS/CATEGORY -->
+                <div class="article-tags mt-5">
+                    {% if single_post.category %}
+                    <span class="tag-label">Filed under:</span>
+                    <a href="{% url 'posts_by_category' single_post.category.id %}" class="article-tag">
+                        <i class="fa-solid fa-folder"></i> {{ single_post.category }}
                     </a>
+                    {% endif %}
+                </div>
 
-                    <a href="https://x.com/intent/tweet?text={{ single_post.title }}&url={{ request.build_absolute_uri }}"
-                       target="_blank"
-                       class="share twitter">
-                        <i class="fa-brands fa-x-twitter"></i>
-                    </a>
+                <!-- SHARE SECTION -->
+                <div class="share-section mt-5">
+                    <h6 class="share-title">
+                        <i class="fa-solid fa-share-nodes"></i> Share this article
+                    </h6>
+                    <div class="share-buttons">
+                        <a href="https://wa.me/?text={{ single_post.title }} {{ request.build_absolute_uri }}"
+                            target="_blank" class="share-btn whatsapp" title="Share on WhatsApp">
+                            <i class="fa-brands fa-whatsapp"></i>
+                            <span>WhatsApp</span>
+                        </a>
 
-                    <a href="https://www.instagram.com/"
-                       target="_blank"
-                       class="share instagram"
-                       title="Copy link and share on Instagram">
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
+                        <a href="https://x.com/intent/tweet?text={{ single_post.title }}&url={{ request.build_absolute_uri }}"
+                            target="_blank" class="share-btn twitter" title="Share on X">
+                            <i class="fa-brands fa-x-twitter"></i>
+                            <span>Twitter</span>
+                        </a>
+
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+                            target="_blank" class="share-btn facebook" title="Share on Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                            <span>Facebook</span>
+                        </a>
+
+                        <button onclick="copyToClipboard('{{ request.build_absolute_uri }}')"
+                            class="share-btn copy-link" title="Copy Link">
+                            <i class="fa-solid fa-link"></i>
+                            <span>Copy Link</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Author Card -->
+                <div class="author-card mt-5">
+                    <div class="author-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="author-info">
+                        <span class="author-label">Written by</span>
+                        <h5 class="author-name">{{ single_post.author }}</h5>
+                        <p class="author-bio">Cinema enthusiast sharing the latest updates from the world of movies.</p>
+                    </div>
                 </div>
 
             </article>
@@ -77,48 +132,116 @@
         </main>
 
         <!-- ================= SIDEBAR ================= -->
-        <aside class="col-lg-4">
+        <aside class="col-lg-4 blog-sidebar">
+            <div class="sidebar-sticky">
 
-            
-
-            <!-- CATEGORIES -->
-            {% if categories %}
-            <div class="sidebar-box">
-                <h6 class="sidebar-title">Categories</h6>
-                <ul class="category-list">
-                    {% for category in categories %}
-                    <li>
-                        <a href="{% url 'posts_by_category' category.id %}">
-                            {{ category.category_name }}
-                        </a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
-
-            <!-- FOLLOW -->
-            <div class="sidebar-box text-center">
-                <h6 class="sidebar-title">Follow Masthi Updates</h6>
-                <div class="follow-row">
-
-                    <a href="https://www.instagram.com/masthi__updates" target="_blank">
-                        <i class="fa-brands fa-instagram"></i>
+                <!-- Quick Actions -->
+                <div class="sidebar-box quick-actions">
+                    <a href="javascript:history.back()" class="action-btn">
+                        <i class="fa-solid fa-arrow-left"></i> Go Back
                     </a>
-
-                    <a href="https://youtube.com/@cine_muchatluu" target="_blank">
-                        <i class="fa-brands fa-youtube"></i>
+                    <a href="{% url 'home' %}" class="action-btn">
+                        <i class="fa-solid fa-home"></i> Home
                     </a>
-
-                    <a href="https://x.com/cine_muchatlu" target="_blank">
-                        <i class="fa-brands fa-x-twitter"></i>
-                    </a>
-
                 </div>
-            </div>
 
+                <!-- Search Box -->
+                <div class="sidebar-box">
+                    <h6 class="sidebar-title">
+                        <i class="fa-solid fa-magnifying-glass text-gold"></i> Search Articles
+                    </h6>
+                    <form action="{% url 'search' %}" method="get" class="sidebar-search">
+                        <div class="sidebar-search-wrapper">
+                            <input type="text" name="keyword" placeholder="Search movies, reviews..."
+                                class="sidebar-search-input">
+                            <button type="submit" class="sidebar-search-btn">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- CATEGORIES -->
+                {% if categories %}
+                <div class="sidebar-box">
+                    <h6 class="sidebar-title">
+                        <i class="fa-solid fa-folder-open text-gold"></i> Browse Categories
+                    </h6>
+                    <ul class="category-list">
+                        {% for category in categories %}
+                        <li>
+                            <a href="{% url 'posts_by_category' category.id %}">
+                                <i class="fa-solid fa-caret-right"></i>
+                                {{ category.category_name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <!-- About Card -->
+                <div class="sidebar-box about-sidebar">
+                    <h6 class="sidebar-title">
+                        <i class="fa-solid fa-film text-gold"></i> {{ about.about_heading }}
+                    </h6>
+                    <p class="about-text">
+                        {{ about.about_description }}
+                    </p>
+                </div>
+
+                <!-- FOLLOW -->
+                <div class="sidebar-box follow-box">
+                    <h6 class="sidebar-title">
+                        <i class="fa-solid fa-heart text-gold"></i> Stay Connected
+                    </h6>
+                    <p class="follow-text">Join our global cinema community!</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/masthi__updates" target="_blank"
+                            class="social-link instagram" title="Instagram">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="https://youtube.com/@cine_muchatluu" target="_blank" class="social-link youtube"
+                            title="YouTube">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                        <a href="https://x.com/cine_muchatlu" target="_blank" class="social-link twitter"
+                            title="Twitter">
+                            <i class="fa-brands fa-x-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="sidebar-box newsletter-box">
+                    <div class="newsletter-icon">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <h6 class="sidebar-title">Subscribe for Updates</h6>
+                    <p class="newsletter-text">Get cinema news from around the world!</p>
+                    <a href="https://www.instagram.com/masthi__updates" target="_blank" class="newsletter-btn">
+                        <i class="fa-brands fa-instagram"></i> Follow on Instagram
+                    </a>
+                </div>
+
+            </div>
         </aside>
 
     </div>
 </div>
+
+<script>
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function () {
+            const btn = document.querySelector('.copy-link');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Copied!</span>';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.classList.remove('copied');
+            }, 2000);
+        });
+    }
+</script>
 {% endblock %}

@@ -1,37 +1,66 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="category-page">
 
+    <!-- Category Header -->
+    <div class="category-header mb-4">
+        <h3 class="section-title">
+            <i class="fa-solid fa-folder-open"></i> {{ category.category_name }}
+        </h3>
+        {% if posts %}
+        <p class="results-count">
+            <span class="badge bg-warning text-dark">{{ posts|length }}</span>
+            post{{ posts|length|pluralize }} in this category
+        </p>
+        {% endif %}
+    </div>
 
-
-<!-- ================= FEATURED POSTS ================= -->
-<h3 class="section-title">
-    <i class="fa-solid fa-fire"></i> {{ category }}
-</h3>
-
-<div class="row mb-4">
-    {% if posts %}
-    {% for post in posts %}
-    <div class="col-md-6 mb-3">
-        <div class="card h-100">
-            <div class="card-body">
-                <h4><a href="{% url 'blogs' post.slug %}" class="text-decoration-none text-warning">{{ post.title }}</a>
-                </h4>
-                <small class="d-block mb-2">
-                    <i class="fa-regular fa-clock"></i>
-                    {{ post.created_at|timesince }} ago ·
-                    <i class="fa-solid fa-user"></i> {{ post.author }}
-                </small>
-                <p>
-                    {{ post.short_description|truncatewords:25 }}
-                </p>
+    <!-- Posts Grid -->
+    <div class="row">
+        {% if posts %}
+        {% for post in posts %}
+        <div class="col-lg-6 col-md-6 mb-4">
+            <div class="card h-100 post-card">
+                {% if post.feature_image %}
+                <div class="card-img-wrapper">
+                    <img src="{{ post.feature_image.url }}" class="card-img-top" alt="{{ post.title }}">
+                    <div class="card-img-overlay-gradient"></div>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="{% url 'blogs' post.slug %}">{{ post.title }}</a>
+                    </h4>
+                    <div class="post-meta mb-2">
+                        <span><i class="fa-regular fa-clock"></i> {{ post.created_at|timesince }} ago</span>
+                        <span class="dot">•</span>
+                        <span><i class="fa-solid fa-user"></i> {{ post.author }}</span>
+                    </div>
+                    <p class="card-text">{{ post.short_description|truncatewords:20 }}</p>
+                    <a href="{% url 'blogs' post.slug %}" class="btn btn-sm btn-outline-warning">
+                        Read More <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
         </div>
+        {% endfor %}
+        {% else %}
+        <!-- No Posts State -->
+        <div class="col-12">
+            <div class="no-results-box text-center py-5">
+                <div class="no-results-icon mb-4">
+                    <i class="fa-solid fa-film"></i>
+                </div>
+                <h4>No posts in this category yet</h4>
+                <p class="text-muted">Check back soon for new content!</p>
+                <a href="{% url 'home' %}" class="btn btn-warning mt-3">
+                    <i class="fa-solid fa-home"></i> Browse Home
+                </a>
+            </div>
+        </div>
+        {% endif %}
     </div>
-    {% endfor %}
-    {% else %}
-    <p> NO POSTS FOUND!!!</p>
-    {% endif %}
-</div>
 
+</div>
 {% endblock %}

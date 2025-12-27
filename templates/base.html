@@ -6,13 +6,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masthi Updates</title>
+    <title>Masthi Updates | Cinema News & Entertainment</title>
+    <meta name="description"
+        content="Your ultimate destination for cinema news, reviews, and entertainment updates from around the world.">
 
     <!-- Bootstrap -->
     <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
@@ -26,14 +30,17 @@
     <div class="container">
 
         <!-- ================= HEADER ================= -->
-        <header class="blog-header py-2 py-md-3 mb-3">
+        <header class="blog-header py-3 mb-3">
             <div class="row align-items-center header-row">
 
                 <!-- Logo -->
                 <div class="col-6 col-sm-4 col-md-3">
                     <a href="{% url 'home' %}" class="blog-header-logo">
                         <img src="{% static 'images/logo.png' %}" class="site-logo" alt="Masthi Updates Logo">
-                        <span class="brand-text">MASTHI UPDATES</span>
+                        <div class="brand-wrapper">
+                            <span class="brand-text">MASTHI UPDATES</span>
+                            <span class="brand-tagline d-none d-lg-block">Your Cinema Universe</span>
+                        </div>
                     </a>
                 </div>
 
@@ -54,26 +61,38 @@
                 <!-- Action Buttons -->
                 <div class="col-6 col-sm-8 col-md-4 d-flex justify-content-end align-items-center gap-2">
                     <!-- Theme Toggle (always visible) -->
-                    <button id="themeToggle" class="btn btn-sm btn-light">
+                    <button id="themeToggle" class="btn btn-sm btn-light header-btn" title="Toggle Theme">
                         <i class="fa-solid fa-moon"></i>
                     </button>
 
                     <!-- Search icon for mobile (opens search) -->
-                    <button class="btn btn-sm btn-light d-md-none" id="mobileSearchToggle">
+                    <button class="btn btn-sm btn-light header-btn d-md-none" id="mobileSearchToggle" title="Search">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
 
-                    <!-- Login (visible on sm+) -->
-                    <a href="#" class="btn btn-sm btn-warning d-none d-sm-inline-flex align-items-center">
+                    <!-- Login Button -->
+                    {% if not user.is_authenticated %}
+                    <a href="{% url 'login' %}" class="auth-btn login-btn" title="Login">
                         <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                        <span class="d-none d-lg-inline ms-1">Login</span>
+                        <span class="d-none d-md-inline">Login</span>
                     </a>
 
-                    <!-- Register (visible on lg+) -->
-                    <a href="#" class="btn btn-sm btn-outline-secondary d-none d-lg-inline-flex align-items-center">
+                    <!-- Register Button -->
+                    <a href="{% url 'register' %}" class="auth-btn register-btn" title="Register">
                         <i class="fa-solid fa-user-plus"></i>
-                        <span class="ms-1">Register</span>
+                        <span class="d-none d-md-inline">Register</span>
                     </a>
+                    {% else %}
+                    <!-- Logged In User -->
+                    <div class="user-greeting">
+                        <i class="fa-solid fa-user"></i>
+                        <span class="d-none d-sm-inline">Hi, <strong>{{ user.username }}</strong></span>
+                    </div>
+                    <a href="{% url 'logout' %}" class="auth-btn logout-btn" title="Logout">
+                        <i class="fa-solid fa-sign-out-alt"></i>
+                        <span class="d-none d-lg-inline">Logout</span>
+                    </a>
+                    {% endif %}
                 </div>
 
             </div>
@@ -97,7 +116,11 @@
         <!-- ================= CATEGORIES ================= -->
         {% if categories %}
         <div class="nav-scroller mb-4">
-            <nav class="nav flex-wrap justify-content-center justify-content-md-between">
+            <nav class="nav flex-wrap justify-content-center justify-content-md-start">
+                <a href="{% url 'home' %}">
+                    <i class="fa-solid fa-house"></i>
+                    Home
+                </a>
                 {% for cat in categories %}
                 <a href="{% url 'posts_by_category' cat.id %}">
                     <i class="fa-solid fa-clapperboard"></i>
@@ -112,38 +135,92 @@
 
     </div>
 
-    <!-- ================= FOOTER (STATIC FOLLOW US) ================= -->
+    <!-- ================= FOOTER ================= -->
     <footer class="blog-footer">
-        <div class="footer-inner">
+        <div class="footer-container">
 
-            <h4 class="footer-title">
-                Masthi Updates
-                <span class="footer-underline"></span>
-            </h4>
+            <!-- Footer Top -->
+            <div class="footer-top">
+                <div class="container">
+                    <div class="row">
 
-            <!-- FOLLOW US (STATIC) -->
-            <div class="footer-socials">
-                <a href="https://www.instagram.com/masthi__updates" target="_blank" aria-label="Instagram">
-                    <i class="fa-brands fa-instagram"></i>
-                </a>
+                        <!-- Brand Column -->
+                        <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                            <div class="footer-brand">
+                                <img src="{% static 'images/logo.png' %}" alt="Masthi Updates" class="footer-logo">
+                                <h4>Masthi Updates</h4>
+                            </div>
+                            <p class="footer-about">
+                                Your ultimate destination for cinema news, reviews, and entertainment updates.
+                                Hollywood, Bollywood, Tollywood & beyond! 🎬🌍
+                            </p>
+                        </div>
 
-                <a href="https://youtube.com/@cine_muchatluu" target="_blank" aria-label="YouTube">
-                    <i class="fa-brands fa-youtube"></i>
-                </a>
+                        <!-- Quick Links -->
+                        <div class="col-lg-2 col-md-6 col-6 mb-4 mb-lg-0">
+                            <h5 class="footer-heading">Quick Links</h5>
+                            <ul class="footer-links">
+                                <li><a href="{% url 'home' %}"><i class="fa-solid fa-chevron-right"></i> Home</a></li>
+                                <li><a href="{% url 'search' %}"><i class="fa-solid fa-chevron-right"></i> Search</a>
+                                </li>
+                            </ul>
+                        </div>
 
-                <a href="https://x.com/cine_muchatlu" target="_blank" aria-label="X (Twitter)">
-                    <i class="fa-brands fa-x-twitter"></i>
-                </a>
+                        <!-- Categories -->
+                        <div class="col-lg-3 col-md-6 col-6 mb-4 mb-lg-0">
+                            <h5 class="footer-heading">Categories</h5>
+                            <ul class="footer-links">
+                                {% for cat in categories %}
+                                {% if forloop.counter <= 4 %} <li><a href="{% url 'posts_by_category' cat.id %}"><i
+                                            class="fa-solid fa-chevron-right"></i> {{ cat.category_name }}</a></li>
+                                    {% endif %}
+                                    {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- Connect -->
+                        <div class="col-lg-3 col-md-6">
+                            <h5 class="footer-heading">Connect With Us</h5>
+                            <p class="footer-connect-text">Follow us for worldwide cinema updates!</p>
+                            <div class="footer-socials-modern">
+                                <a href="https://www.instagram.com/masthi__updates" target="_blank"
+                                    class="social-icon instagram" title="Instagram">
+                                    <i class="fa-brands fa-instagram"></i>
+                                </a>
+                                <a href="https://youtube.com/@cine_muchatluu" target="_blank"
+                                    class="social-icon youtube" title="YouTube">
+                                    <i class="fa-brands fa-youtube"></i>
+                                </a>
+                                <a href="https://x.com/cine_muchatlu" target="_blank" class="social-icon twitter"
+                                    title="Twitter">
+                                    <i class="fa-brands fa-x-twitter"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
 
-            <p class="footer-copy">
-                © <span id="year"></span> Masthi Updates · Built with
-                <i class="fa-solid fa-heart"></i> for Cinema Lovers 🎬
-            </p>
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-6 text-center text-md-left">
+                            <p class="footer-copy">
+                                © <span id="year"></span> Masthi Updates. All rights reserved.
+                            </p>
+                        </div>
+                        <div class="col-md-6 text-center text-md-right">
+                            <p class="footer-made">
+                                Made with <i class="fa-solid fa-heart text-danger"></i> for Cinema Lovers
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
-
-        <div class="footer-grain"></div>
     </footer>
 
     <!-- ================= SCRIPTS ================= -->
@@ -152,10 +229,14 @@
         const toggleBtn = document.getElementById("themeToggle");
         const body = document.body;
 
-        const savedTheme = localStorage.getItem("theme") || "light";
+        // Default to dark mode if no theme is saved
+        const savedTheme = localStorage.getItem("theme") || "dark";
         if (savedTheme === "dark") {
             body.classList.add("dark-mode");
-            toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            toggleBtn.innerHTML = '<i class="fa-regular fa-lightbulb"></i>';
+        } else {
+            body.classList.remove("dark-mode");
+            toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
         }
 
         toggleBtn.addEventListener("click", () => {
@@ -165,7 +246,7 @@
                 body.classList.contains("dark-mode") ? "dark" : "light"
             );
             toggleBtn.innerHTML = body.classList.contains("dark-mode")
-                ? '<i class="fa-solid fa-sun"></i>'
+                ? '<i class="fa-regular fa-lightbulb"></i>'
                 : '<i class="fa-solid fa-moon"></i>';
         });
 

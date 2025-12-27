@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7 col-sm-10">
+
+                <div class="auth-card">
+                    <!-- Header -->
+                    <div class="auth-header">
+                        <div class="auth-logo">
+                            <img src="{% static 'images/logo.png' %}" alt="Masthi Updates">
+                        </div>
+                        <h2>Create Account</h2>
+                        <p>Join our cinema community today!</p>
+                    </div>
+
+                    <!-- Form -->
+                    <form action="{% url 'register' %}" method="post" class="auth-form">
+                        {% csrf_token %}
+                        {{ form | crispy }}
+
+                        <div class="terms-check">
+                            <label>
+                                <input type="checkbox" name="terms" required>
+                                I agree to the <a href="#" class="auth-link">Terms & Conditions</a>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="auth-submit-btn">
+                            <i class="fa-solid fa-rocket"></i> Create Account
+                        </button>
+                    </form>
+
+                    <!-- Divider -->
+                    <div class="auth-divider">
+                        <span>or sign up with</span>
+                    </div>
+
+                    <!-- Social Login -->
+                    <div class="social-login">
+                        <button class="social-btn google">
+                            <i class="fa-brands fa-google"></i>
+                        </button>
+                        <button class="social-btn facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </button>
+                        <button class="social-btn twitter">
+                            <i class="fa-brands fa-x-twitter"></i>
+                        </button>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="auth-footer">
+                        <p>Already have an account?
+                            <a href="{% url 'login' %}" class="auth-link">Login here</a>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

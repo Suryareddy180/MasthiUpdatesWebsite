@@ -28,4 +28,17 @@ steps of making of Mastie Updates :-
 25. Single Blog page Final
 26.Building "About Us" and Social Links" Features
 27. Search Feature
-28.
+28. Git Push
+29. Registration Setup
+30. User Creation  Form
+31. Registration Functionality (
+                                https://django-crispy-forms.readthedocs.io/en/latest/install.html
+                                pip install django-crispy-forms
+                                add crispy_forms to the installed apps in the settings.py file
+                                 pip install crispy-bootstrap4
+                                CRISPY_TEMPLATE_PACK = 'bootstrap4' (paste in the settings.py file)
+                                add 'crispy_bootstrap4' to the installed apps in the settings.py file
+                                add crispy_forms_tags to the template {% load crispy_forms_tags %}
+                                )
+32. Login Functionality
+33. Git Push
