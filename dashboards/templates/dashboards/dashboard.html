@@ -1,0 +1,365 @@
+{% extends 'dashboards/base_dashboard.html' %}
+
+{% block page_title %}Dashboard Overview{% endblock %}
+{% block breadcrumb %}Overview{% endblock %}
+
+{% block dashboard_content %}
+<!-- Stats Cards -->
+<div class="stats-row">
+    <div class="stat-card gradient-purple">
+        <div class="stat-icon">
+            <i class="fa-solid fa-folder"></i>
+        </div>
+        <div class="stat-info">
+            <h3>{{ category_count }}</h3>
+            <p>Total Categories</p>
+        </div>
+    </div>
+    <div class="stat-card gradient-blue">
+        <div class="stat-icon">
+            <i class="fa-solid fa-newspaper"></i>
+        </div>
+        <div class="stat-info">
+            <h3>{{ post_count }}</h3>
+            <p>Total Posts</p>
+        </div>
+    </div>
+    <div class="stat-card gradient-green">
+        <div class="stat-icon">
+            <i class="fa-solid fa-eye"></i>
+        </div>
+        <div class="stat-info">
+            <h3>{{ published_count|default:"0" }}</h3>
+            <p>Published</p>
+        </div>
+    </div>
+    <div class="stat-card gradient-orange">
+        <div class="stat-icon">
+            <i class="fa-solid fa-star"></i>
+        </div>
+        <div class="stat-info">
+            <h3>{{ featured_count|default:"0" }}</h3>
+            <p>Featured</p>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="quick-actions-section mt-4">
+    <div class="section-header">
+        <h5 class="section-heading"><i class="fa-solid fa-bolt text-warning"></i> Quick Actions</h5>
+        <span class="section-subtitle">Manage your content</span>
+    </div>
+    <div class="action-cards">
+        <a href="{% url 'add_post' %}" class="action-card action-gold">
+            <div class="action-content">
+                <div class="action-icon">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <div class="action-text">
+                    <span class="action-title">New Post</span>
+                    <span class="action-desc">Create article</span>
+                </div>
+            </div>
+            <i class="fa-solid fa-arrow-right action-arrow"></i>
+        </a>
+        <a href="{% url 'add_category' %}" class="action-card action-cyan">
+            <div class="action-content">
+                <div class="action-icon">
+                    <i class="fa-solid fa-folder-plus"></i>
+                </div>
+                <div class="action-text">
+                    <span class="action-title">New Category</span>
+                    <span class="action-desc">Add category</span>
+                </div>
+            </div>
+            <i class="fa-solid fa-arrow-right action-arrow"></i>
+        </a>
+        <a href="{% url 'posts' %}" class="action-card action-green">
+            <div class="action-content">
+                <div class="action-icon">
+                    <i class="fa-solid fa-list"></i>
+                </div>
+                <div class="action-text">
+                    <span class="action-title">All Posts</span>
+                    <span class="action-desc">View all</span>
+                </div>
+            </div>
+            <i class="fa-solid fa-arrow-right action-arrow"></i>
+        </a>
+        <a href="{% url 'home' %}" class="action-card action-purple" target="_blank">
+            <div class="action-content">
+                <div class="action-icon">
+                    <i class="fa-solid fa-globe"></i>
+                </div>
+                <div class="action-text">
+                    <span class="action-title">View Site</span>
+                    <span class="action-desc">Open website</span>
+                </div>
+            </div>
+            <i class="fa-solid fa-arrow-right action-arrow"></i>
+        </a>
+    </div>
+</div>
+
+
+<style>
+    /* Enhanced Stats Cards */
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+    }
+
+    .stat-card {
+        border-radius: 16px;
+        padding: 25px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transition: transform 0.5s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    .stat-card:hover::before {
+        transform: scale(1.5);
+    }
+
+    .gradient-purple {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .gradient-blue {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .gradient-green {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+
+    .gradient-orange {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .stat-info h3 {
+        font-size: 2rem;
+        font-weight: 800;
+        margin: 0;
+        color: #fff;
+    }
+
+    .stat-info p {
+        margin: 0;
+        opacity: 0.9;
+        font-size: 0.85rem;
+    }
+
+    /* Quick Actions Section */
+    .quick-actions-section {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 16px;
+        padding: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .section-heading {
+        font-weight: 700;
+        color: var(--primary-gold);
+        margin: 0;
+    }
+
+    .section-subtitle {
+        color: #888;
+        font-size: 0.85rem;
+    }
+
+    .action-cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+
+    @media (max-width: 992px) {
+        .action-cards {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 576px) {
+        .action-cards {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .action-card {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+        border-radius: 14px;
+        padding: 18px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .action-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        border-radius: 14px 14px 0 0;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .action-card:hover::before {
+        opacity: 1;
+    }
+
+    .action-card.action-gold::before {
+        background: linear-gradient(90deg, #ffc107, #ff9800);
+    }
+
+    .action-card.action-cyan::before {
+        background: linear-gradient(90deg, #00bcd4, #4facfe);
+    }
+
+    .action-card.action-green::before {
+        background: linear-gradient(90deg, #28a745, #43e97b);
+    }
+
+    .action-card.action-purple::before {
+        background: linear-gradient(90deg, #6f42c1, #9c27b0);
+    }
+
+    .action-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+    }
+
+    .action-content {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .action-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    .action-gold .action-icon {
+        background: rgba(255, 193, 7, 0.15);
+        color: #ffc107;
+    }
+
+    .action-cyan .action-icon {
+        background: rgba(0, 188, 212, 0.15);
+        color: #00bcd4;
+    }
+
+    .action-green .action-icon {
+        background: rgba(40, 167, 69, 0.15);
+        color: #28a745;
+    }
+
+    .action-purple .action-icon {
+        background: rgba(111, 66, 193, 0.15);
+        color: #9c27b0;
+    }
+
+    .action-text {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .action-title {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #fff;
+    }
+
+    .action-desc {
+        font-size: 0.78rem;
+        color: #888;
+        margin-top: 2px;
+    }
+
+    .action-arrow {
+        color: #555;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+
+    .action-card:hover .action-arrow {
+        color: var(--primary-gold);
+        transform: translateX(4px);
+    }
+
+    @media (max-width: 576px) {
+        .stat-card {
+            padding: 18px;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            font-size: 1.2rem;
+        }
+
+        .stat-info h3 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}

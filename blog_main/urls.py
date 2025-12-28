@@ -24,16 +24,19 @@ from django.conf.urls.static import static
 from django.conf import settings
 from blogs import views as BlogsViews
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home,name='home'),
     path('category/',include('blogs.urls')),
-    path('blogs/<slug:slug>/',BlogsViews.blogs , name ='blogs'),
-    #search endpoint
+    #search endpoint - must come BEFORE blogs/<slug> to avoid conflict
     path('blogs/search/',BlogsViews.search , name ='search'),
+    path('blogs/<slug:slug>/',BlogsViews.blogs , name ='blogs'),
     path('register/',views.register,name='register'),
     path('login/',views.login,name='login'),
     path('logout/',views.logout,name='logout'),
+    path('dashboard/',include('dashboards.urls')),
+
 
 
 

@@ -161,11 +161,11 @@
         const toggleBtn = document.getElementById("themeToggle");
         const body = document.body;
 
-        // Load saved theme
-        const savedTheme = localStorage.getItem("theme") || "light";
+        // Load saved theme - default to dark mode
+        const savedTheme = localStorage.getItem("theme") || "dark";
         if (savedTheme === "dark") {
             body.classList.add("dark-mode");
-            toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            toggleBtn.innerHTML = '<i class="fa-regular fa-lightbulb"></i>';
         }
 
         // Toggle theme on click
@@ -176,7 +176,7 @@
                 body.classList.contains("dark-mode") ? "dark" : "light"
             );
             toggleBtn.innerHTML = body.classList.contains("dark-mode")
-                ? '<i class="fa-solid fa-sun"></i>'
+                ? '<i class="fa-regular fa-lightbulb"></i>'
                 : '<i class="fa-solid fa-moon"></i>';
         });
     </script>

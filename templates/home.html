@@ -2,147 +2,331 @@
 
 {% block content %}
 
-<!-- ================= HERO ================= -->
-{% for post in featured_posts %}
-{% if forloop.first %}
-<div class="hero-section mb-5">
-    {% if post.feature_image %}
-    <div class="hero-image-wrapper">
-        <img src="{{ post.feature_image.url }}" alt="{{ post.title }}" class="hero-image">
-        <div class="hero-overlay"></div>
+<!-- ================= HERO FEATURED CAROUSEL ================= -->
+{% if featured_posts %}
+<section class="hero-showcase">
+    <!-- Progress Bar -->
+    <div class="slide-progress-bar">
+        <div class="progress-fill" id="slideProgress"></div>
     </div>
-    {% endif %}
-    <div class="hero-content-overlay">
-        <span class="badge bg-warning text-dark mb-2">
-            <i class="fa-solid fa-star"></i> Featured
-        </span>
-        <h1>{{ post.title }}</h1>
-        <p class="mt-3 mb-4">
-            {{ post.short_description|truncatewords:20 }}
-        </p>
-        <a href="{% url 'blogs' post.slug %}" class="btn btn-warning">
-            <i class="fa-solid fa-book-open"></i> Read Full Story
-        </a>
-    </div>
-</div>
-{% endif %}
-{% endfor %}
 
-<!-- ================= FEATURED POSTS ================= -->
-<h3 class="section-title">
-    <i class="fa-solid fa-fire"></i> Featured Posts
-</h3>
-
-<div class="row mb-5">
-    {% for post in featured_posts %}
-    {% if not forloop.first %}
-    <div class="col-lg-6 col-md-6 mb-4">
-        <div class="card h-100 post-card">
+    <div class="hero-slides-wrapper">
+        {% for post in featured_posts %}
+        <div class="hero-slide-item {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}">
             {% if post.feature_image %}
-            <div class="card-img-wrapper">
-                <img src="{{ post.feature_image.url }}" alt="{{ post.title }}">
-            </div>
+            <div class="hero-parallax-bg" style="background-image: url('{{ post.feature_image.url }}');"></div>
+            {% else %}
+            <div class="hero-parallax-bg" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);"></div>
             {% endif %}
-            <div class="card-body">
-                <h4 class="card-title">
-                    <a href="{% url 'blogs' post.slug %}">{{ post.title }}</a>
-                </h4>
-                <div class="post-meta mb-2">
-                    <span><i class="fa-regular fa-clock"></i> {{ post.created_at|timesince }} ago</span>
-                    <span class="dot">•</span>
-                    <span><i class="fa-solid fa-user"></i> {{ post.author }}</span>
+            <div class="hero-cinematic-overlay"></div>
+            <div class="hero-content-wrap">
+                <div class="hero-inner">
+                    <span class="pulse-badge">
+                        <i class="fa-solid fa-star"></i> Featured
+                    </span>
+                    <h1 class="hero-mega-title">{{ post.title }}</h1>
+                    <p class="hero-description">{{ post.short_description|truncatewords:25 }}</p>
+                    <div class="hero-actions">
+                        <a href="{% url 'blogs' post.slug %}" class="hero-primary-btn">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Read Story</span>
+                        </a>
+                        <a href="{% url 'blogs' post.slug %}" class="hero-secondary-btn">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <span>More Info</span>
+                        </a>
+                    </div>
                 </div>
-                <p class="card-text">{{ post.short_description|truncatewords:20 }}</p>
-                <a href="{% url 'blogs' post.slug %}" class="btn btn-sm btn-outline-warning">
-                    Read More <i class="fa-solid fa-arrow-right"></i>
-                </a>
             </div>
-        </div>
-    </div>
-    {% endif %}
-    {% endfor %}
-</div>
-
-<!-- ================= RECENT POSTS ================= -->
-<h3 class="section-title">
-    <i class="fa-solid fa-clock-rotate-left"></i> Recent Posts
-</h3>
-
-<div class="row">
-
-    <!-- POSTS -->
-    <div class="col-lg-8 col-md-7">
-        {% for post in posts %}
-        <div class="card mb-4 post-card horizontal-card">
-            {% if post.feature_image %}
-            <div class="horizontal-img-wrapper">
-                <img src="{{ post.feature_image.url }}" alt="{{ post.title }}">
-            </div>
-            {% endif %}
-            <div class="card-body">
-                <h4 class="card-title">
-                    <a href="{% url 'blogs' post.slug %}">{{ post.title }}</a>
-                </h4>
-                <div class="post-meta mb-2">
-                    <span><i class="fa-regular fa-calendar"></i> {{ post.created_at|timesince }} ago</span>
-                    <span class="dot">•</span>
-                    <span><i class="fa-solid fa-user"></i> {{ post.author }}</span>
-                    {% if post.category %}
-                    <span class="dot">•</span>
-                    <a href="{% url 'posts_by_category' post.category.id %}" class="post-category">
-                        {{ post.category.category_name }}
-                    </a>
-                    {% endif %}
-                </div>
-                <p class="card-text">{{ post.short_description|truncatewords:20 }}</p>
-                <a href="{% url 'blogs' post.slug %}" class="btn btn-sm btn-outline-warning">
-                    Read More <i class="fa-solid fa-arrow-right"></i>
-                </a>
-            </div>
-        </div>
-        {% empty %}
-        <div class="no-results-box text-center py-5">
-            <div class="no-results-icon mb-4">
-                <i class="fa-solid fa-newspaper"></i>
-            </div>
-            <h4>No posts yet</h4>
-            <p class="text-muted">Check back soon for new content!</p>
         </div>
         {% endfor %}
     </div>
 
-    <!-- SIDEBAR -->
-    <aside class="col-lg-4 col-md-5 blog-sidebar">
+    <!-- Navigation Arrows -->
+    <button class="hero-control prev-slide" onclick="navigateSlide(-1)" aria-label="Previous">
+        <i class="fa-solid fa-angle-left"></i>
+    </button>
+    <button class="hero-control next-slide" onclick="navigateSlide(1)" aria-label="Next">
+        <i class="fa-solid fa-angle-right"></i>
+    </button>
 
-        <!-- About Section -->
-        <div class="about-card p-4 mb-4 rounded">
-            <h4><i class="fa-solid fa-circle-info"></i> {{ about.about_heading }}</h4>
-            <p class="mb-0">{{ about.about_description }}</p>
+    <!-- Thumbnail Navigation -->
+    <div class="thumbnail-nav">
+        {% for post in featured_posts %}
+        <button class="thumb-item {% if forloop.first %}active{% endif %}" onclick="jumpToSlide({{ forloop.counter0 }})"
+            data-index="{{ forloop.counter0 }}">
+            {% if post.feature_image %}
+            <img src="{{ post.feature_image.url }}" alt="{{ post.title }}">
+            {% else %}
+            <div class="thumb-placeholder"><i class="fa-solid fa-film"></i></div>
+            {% endif %}
+            <span class="thumb-number">0{{ forloop.counter }}</span>
+        </button>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- ================= TRENDING STRIP ================= -->
+{% if posts %}
+<section class="trending-strip">
+    <div class="trending-label">
+        <i class="fa-solid fa-bolt"></i> Trending Now
+    </div>
+    <div class="trending-scroll">
+        {% for post in posts|slice:":5" %}
+        <a href="{% url 'blogs' post.slug %}" class="trending-item">
+            {{ post.title|truncatewords:6 }}
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- ================= MAIN CONTENT GRID ================= -->
+<div class="content-grid-wrapper">
+
+    <!-- MAIN CONTENT -->
+    <main class="primary-content">
+
+        <div class="content-section-header">
+            <div class="header-top">
+                <h2><i class="fa-solid fa-fire-flame-curved"></i> Latest Updates</h2>
+                <div class="accent-line"></div>
+            </div>
+            <p class="section-tagline">Fresh cinema news & entertainment stories</p>
         </div>
 
-        <!-- Follow Us -->
-        <div class="about-card p-4 rounded">
-            <h4><i class="fa-solid fa-share-nodes"></i> Follow Us</h4>
-            <ul class="list-unstyled mb-0">
-                <li>
-                    <a href="https://www.instagram.com/masthi__updates" target="_blank">
-                        <i class="fa-brands fa-instagram"></i> Instagram
+        {% if posts %}
+        <div class="articles-showcase">
+            {% for post in posts %}
+            <article class="article-premium-card">
+                <a href="{% url 'blogs' post.slug %}" class="article-visual">
+                    {% if post.feature_image %}
+                    <img src="{{ post.feature_image.url }}" alt="{{ post.title }}" loading="lazy">
+                    <div class="image-gradient-overlay"></div>
+                    {% else %}
+                    <div class="article-placeholder">
+                        <i class="fa-solid fa-clapperboard"></i>
+                    </div>
+                    {% endif %}
+                    {% if post.category %}
+                    <span class="floating-category">{{ post.category.category_name }}</span>
+                    {% endif %}
+                    <div class="hover-effect-layer">
+                        <span class="view-icon"><i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                <div class="article-details">
+                    <div class="article-metadata">
+                        <span class="meta-item">
+                            <i class="fa-regular fa-clock"></i> {{ post.created_at|timesince }} ago
+                        </span>
+                        <span class="meta-divider">•</span>
+                        <span class="meta-item">
+                            <i class="fa-solid fa-pen-nib"></i> {{ post.author }}
+                        </span>
+                    </div>
+                    <h3 class="article-headline">
+                        <a href="{% url 'blogs' post.slug %}">{{ post.title }}</a>
+                    </h3>
+                    <p class="article-snippet">{{ post.short_description|truncatewords:18 }}</p>
+                    <a href="{% url 'blogs' post.slug %}" class="read-link">
+                        Continue Reading <i class="fa-solid fa-chevron-right"></i>
                     </a>
-                </li>
-                <li>
-                    <a href="https://youtube.com/@cine_muchatluu" target="_blank">
-                        <i class="fa-brands fa-youtube"></i> YouTube
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state-card">
+            <div class="empty-icon"><i class="fa-solid fa-film"></i></div>
+            <h3>Coming Soon!</h3>
+            <p>Exciting content is on the way. Stay tuned!</p>
+        </div>
+        {% endif %}
+
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="content-sidebar">
+
+        <!-- About Widget -->
+        <div class="widget-box about-box">
+            <h3 class="widget-heading">
+                <i class="fa-solid fa-circle-info"></i> About Us
+            </h3>
+            <div class="widget-body">
+                {% if about %}
+                <p>{{ about.about_description }}</p>
+                {% else %}
+                <p>Your ultimate destination for cinema news, reviews, and entertainment updates from around the world.
+                </p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Categories Widget -->
+        {% if categories %}
+        <div class="widget-box categories-box">
+            <h3 class="widget-heading">
+                <i class="fa-solid fa-layer-group"></i> Categories
+            </h3>
+            <div class="widget-body">
+                <ul class="categories-menu">
+                    {% for category in categories %}
+                    <li>
+                        <a href="{% url 'posts_by_category' category.id %}" class="category-item">
+                            <span class="category-label">{{ category.category_name }}</span>
+                            <span class="category-badge">{{ category.post_count|default:0 }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Social Widget -->
+        <div class="widget-box social-connect-box">
+            <h3 class="widget-heading">
+                <i class="fa-solid fa-heart"></i> Connect
+            </h3>
+            <div class="widget-body">
+                <div class="social-buttons-grid">
+                    <a href="https://www.instagram.com/masthi__updates" target="_blank"
+                        class="social-platform instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                        <span>Instagram</span>
                     </a>
-                </li>
-                <li>
-                    <a href="https://x.com/cine_muchatlu" target="_blank">
-                        <i class="fa-brands fa-x-twitter"></i> Twitter
+                    <a href="https://youtube.com/@cine_muchatluu" target="_blank" class="social-platform youtube">
+                        <i class="fa-brands fa-youtube"></i>
+                        <span>YouTube</span>
                     </a>
-                </li>
-            </ul>
+                    <a href="https://x.com/cine_muchatlu" target="_blank" class="social-platform twitter">
+                        <i class="fa-brands fa-x-twitter"></i>
+                        <span>Twitter</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Widget -->
+        <div class="widget-box cta-box">
+            <div class="cta-content">
+                <div class="cta-icon-circle">
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+                <h4>Never Miss Updates!</h4>
+                <p>Follow us for instant cinema news</p>
+                <a href="https://www.instagram.com/masthi__updates" target="_blank" class="cta-action-btn">
+                    <i class="fa-brands fa-instagram"></i> Follow Now
+                </a>
+            </div>
         </div>
 
     </aside>
+
 </div>
+
+<!-- Advanced Carousel JavaScript -->
+<script>
+    (function () {
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide-item');
+        const thumbs = document.querySelectorAll('.thumb-item');
+        const progressBar = document.getElementById('slideProgress');
+        let autoTimer;
+        let progressTimer;
+        const SLIDE_DURATION = 6000;
+
+        if (slides.length === 0) return;
+
+        function updateSlide(index) {
+            if (index >= slides.length) currentSlide = 0;
+            else if (index < 0) currentSlide = slides.length - 1;
+            else currentSlide = index;
+
+            slides.forEach((s, i) => {
+                s.classList.remove('active');
+                if (thumbs[i]) thumbs[i].classList.remove('active');
+            });
+
+            slides[currentSlide].classList.add('active');
+            if (thumbs[currentSlide]) thumbs[currentSlide].classList.add('active');
+
+            resetProgress();
+        }
+
+        window.navigateSlide = function (dir) {
+            updateSlide(currentSlide + dir);
+            resetAutoSlide();
+        };
+
+        window.jumpToSlide = function (idx) {
+            updateSlide(idx);
+            resetAutoSlide();
+        };
+
+        function resetProgress() {
+            if (progressBar) {
+                progressBar.style.transition = 'none';
+                progressBar.style.width = '0%';
+                setTimeout(() => {
+                    progressBar.style.transition = `width ${SLIDE_DURATION}ms linear`;
+                    progressBar.style.width = '100%';
+                }, 50);
+            }
+        }
+
+        function autoAdvance() {
+            updateSlide(currentSlide + 1);
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoTimer);
+            autoTimer = setInterval(autoAdvance, SLIDE_DURATION);
+        }
+
+        // Initialize
+        resetProgress();
+        resetAutoSlide();
+
+        // Pause on hover
+        const hero = document.querySelector('.hero-showcase');
+        if (hero) {
+            hero.addEventListener('mouseenter', () => {
+                clearInterval(autoTimer);
+                if (progressBar) progressBar.style.animationPlayState = 'paused';
+            });
+            hero.addEventListener('mouseleave', () => {
+                resetAutoSlide();
+                if (progressBar) progressBar.style.animationPlayState = 'running';
+            });
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') navigateSlide(-1);
+            if (e.key === 'ArrowRight') navigateSlide(1);
+        });
+
+        // Touch swipe support
+        let touchStart = 0;
+        if (hero) {
+            hero.addEventListener('touchstart', (e) => {
+                touchStart = e.touches[0].clientX;
+            }, { passive: true });
+
+            hero.addEventListener('touchend', (e) => {
+                const diff = touchStart - e.changedTouches[0].clientX;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) navigateSlide(1);
+                    else navigateSlide(-1);
+                }
+            }, { passive: true });
+        }
+    })();
+</script>
 
 {% endblock %}

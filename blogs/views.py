@@ -9,7 +9,7 @@ from django.db.models import Q
 # Create your views here.
 def posts_by_category(request,category_id):
     # Fetch the posts that belongs to the category with the id category_id
-    posts=Blog.objects.filter(category=category_id,status='Published')
+    posts=Blog.objects.filter(category=category_id,status='Published').order_by('-created_at')
     #Use try except when we want to do some custom action if the category does not exists
     # try:
     #     category=Category.objects.get(id=category_id)

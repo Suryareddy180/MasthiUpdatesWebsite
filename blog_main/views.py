@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render,redirect
 
 from blogs.models import Category, Blog
+from assignments.models import About
 from .forms import RegistrationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import auth
@@ -9,25 +10,26 @@ from django.contrib import auth
 def home(request):
     featured_posts=Blog.objects.filter(is_featured=True,status='Published').order_by('-created_at','-updated_at')
     posts = Blog.objects.filter(is_featured=False,status='Published').order_by('-created_at','-updated_at')
+    
+    # Get About info from database
+    about = About.objects.first()
    
     context={
         'featured_posts':featured_posts,
         'posts':posts,
-
+        'about': about,
 
     }
     return render(request, 'home.html', context)
 
 def register(request):
-    
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('register')
+            return redirect('login')
     else:
         form = RegistrationForm()
-        print(form.errors)
         
     context={
         'form':form
@@ -44,7 +46,7 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
             if user is not None:
                 auth.login(request, user)
-                return redirect('home')
+                return redirect('dashboard')
     else:
         form = AuthenticationForm()
     context = {

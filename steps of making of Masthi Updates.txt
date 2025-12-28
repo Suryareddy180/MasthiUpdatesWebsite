@@ -40,5 +40,28 @@ steps of making of Mastie Updates :-
                                 add 'crispy_bootstrap4' to the installed apps in the settings.py file
                                 add crispy_forms_tags to the template {% load crispy_forms_tags %}
                                 )
-32. Login Functionality
+32. Login and Logout Functionality
 33. Git Push
+34. Authentication and Authorization
+35. Groups
+36. upgrading packages( 
+                        pip freeze > requirements.txt
+                        pip install -r requirements.txt --upgrade
+)
+37. Admin and Editor Dashboards
+38. Dashboard URL configuration
+39. Dashboard design
+40. Login required decorator
+41. Sidebar and Link Highlighting
+42. Categories Table
+43. Add Category Setup
+44. Add Category Functionality
+45.Edit Category
+46. Delete Category
+47. Posts Table
+48. Add New Post form
+49. Add Post -Assign Logged - In User to Author
+50. Add post with unique slug
+51. Edit Post
+52. Delete Post
+53. Git Push
