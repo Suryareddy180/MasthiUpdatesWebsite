@@ -1,0 +1,97 @@
+{% extends 'dashboards/base_dashboard.html' %}
+{% load crispy_forms_tags %}
+
+{% block page_title %}Edit User{% endblock %}
+{% block breadcrumb %}Users > Edit User{% endblock %}
+
+{% block dashboard_content %}
+<div class="form-card">
+    <div class="form-header">
+        <div>
+            {% if perms.auth.change_user %}
+            <h4>Edit User</h4>
+            <p>Update user information</p>
+
+        </div>
+    </div>
+
+    <div class="enhanced-form">
+        <form action="{% url 'edit_user' user.id %}" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">
+                    <i class="fa-solid fa-save"></i>
+                    Update User
+                </button>
+                <a href="{% url 'users' %}" class="btn-cancel">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Back
+                </a>
+            </div>
+        </form>
+        {% else %}
+        <div class="permission-denied">
+            <div class="permission-icon">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h4>Access Denied</h4>
+            <p>You do not have permission to edit users.</p>
+            <p class="permission-hint">Please contact your administrator if you believe this is an error.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    /* Permission Denied Styling */
+    .permission-denied {
+        text-align: center;
+        padding: 60px 20px;
+        margin: 0 auto;
+        max-width: 500px;
+    }
+
+    .permission-icon {
+        width: 100px;
+        height: 100px;
+        background: rgba(220, 53, 69, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        font-size: 2.5rem;
+        color: #dc3545;
+    }
+
+    .permission-denied h4 {
+        color: #dc3545;
+        font-weight: 700;
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+    }
+
+    .dark-mode .permission-denied h4 {
+        color: #ff6b6b;
+    }
+
+    .permission-denied p {
+        color: #666;
+        margin-bottom: 10px;
+        font-size: 1rem;
+    }
+
+    .dark-mode .permission-denied p {
+        color: #888;
+    }
+
+    .permission-hint {
+        font-size: 0.9rem !important;
+        font-style: italic;
+        color: #999 !important;
+    }
+</style>
+
+{% endblock %}

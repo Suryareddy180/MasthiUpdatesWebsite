@@ -26,7 +26,8 @@
                         <div class="terms-check">
                             <label>
                                 <input type="checkbox" name="terms" required>
-                                I agree to the <a href="#" class="auth-link">Terms & Conditions</a>
+                                I agree to the <a href="{% url 'terms' %}" target="_blank" class="auth-link">Terms &
+                                    Conditions</a>
                             </label>
                         </div>
 
@@ -35,23 +36,7 @@
                         </button>
                     </form>
 
-                    <!-- Divider -->
-                    <div class="auth-divider">
-                        <span>or sign up with</span>
-                    </div>
 
-                    <!-- Social Login -->
-                    <div class="social-login">
-                        <button class="social-btn google">
-                            <i class="fa-brands fa-google"></i>
-                        </button>
-                        <button class="social-btn facebook">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </button>
-                        <button class="social-btn twitter">
-                            <i class="fa-brands fa-x-twitter"></i>
-                        </button>
-                    </div>
 
                     <!-- Footer -->
                     <div class="auth-footer">

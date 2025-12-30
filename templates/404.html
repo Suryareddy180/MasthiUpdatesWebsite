@@ -1,186 +1,289 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <title>404 | Page Not Found – Masthi Updates</title>
+{% block title %}404 - Page Not Found{% endblock %}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block content %}
+<div class="error-page">
+    <div class="container">
+        <div class="error-content">
 
-    <!-- Bootstrap -->
-    <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
+            <!-- 404 Illustration -->
+            <div class="error-illustration">
+                <div class="error-number">404</div>
+                <div class="error-icon">
+                    <i class="fas fa-film"></i>
+                </div>
+            </div>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="{% static 'css/blog.css' %}" rel="stylesheet">
-
-    <style>
-        /* Light mode (default) */
-        .error-page {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            color: #212529;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            transition: all 0.4s ease;
-        }
-
-        /* Dark mode */
-        .dark-mode .error-page {
-            background: radial-gradient(circle at top, #1a1a2e, #0f0f0f);
-            color: #fff;
-        }
-
-        .error-box {
-            max-width: 600px;
-            padding: 40px;
-        }
-
-        .error-code {
-            font-size: 7rem;
-            font-weight: 900;
-            color: #ffc107;
-            letter-spacing: 5px;
-            text-shadow: 0 0 30px rgba(255, 193, 7, 0.3);
-        }
-
-        .error-title {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-        }
-
-        .error-text {
-            color: #666;
-            margin-bottom: 30px;
-        }
-
-        .dark-mode .error-text {
-            color: #ccc;
-        }
-
-        .error-img {
-            max-width: 280px;
-            margin: 20px auto;
-        }
-
-        .btn-warning {
-            border-radius: 30px;
-            padding: 10px 30px;
-            font-weight: 700;
-        }
-
-        .btn-outline-secondary {
-            border-radius: 30px;
-            padding: 10px 30px;
-        }
-
-        .dark-mode .btn-outline-secondary {
-            border-color: #666;
-            color: #ccc;
-        }
-
-        .dark-mode .btn-outline-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #ffc107;
-            color: #ffc107;
-        }
-
-        /* Theme toggle button */
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-
-        .theme-toggle .btn {
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .dark-mode .theme-toggle .btn {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.15);
-            color: #fff;
-        }
-    </style>
-</head>
-
-<body>
-
-    <!-- Theme Toggle -->
-    <div class="theme-toggle">
-        <button id="themeToggle" class="btn btn-sm btn-light">
-            <i class="fa-solid fa-moon"></i>
-        </button>
-    </div>
-
-    <div class="error-page">
-        <div class="error-box">
-
-            <div class="error-code">404</div>
-
-            <h1 class="error-title">
-                <i class="fa-solid fa-film"></i> Scene Not Found
-            </h1>
-
-            <p class="error-text">
-                Oops! The page you're looking for doesn't exist or has been removed.
-                Looks like this scene was cut from the final edit 🎬
+            <!-- Error Message -->
+            <h1 class="error-title">Oops! Scene Not Found</h1>
+            <p class="error-message">
+                Looks like this page took an unexpected plot twist and disappeared!
+                The content you're looking for might have been moved or doesn't exist.
             </p>
 
-            <!-- ACTION BUTTONS -->
-            <div class="mt-4">
-                <a href="{% url 'home' %}" class="btn btn-warning mr-2">
-                    <i class="fa-solid fa-house"></i> Go Home
-                </a>
+            <!-- Search Box -->
+            <div class="error-search">
+                <form action="{% url 'search' %}" method="get" class="error-search-form">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" name="keyword" class="error-search-input"
+                        placeholder="Search for movies, news, reviews..." autofocus>
+                    <button type="submit" class="error-search-btn">
+                        <span>Search</span>
+                    </button>
+                </form>
+            </div>
 
-                <a href="javascript:history.back()" class="btn btn-outline-secondary">
-                    <i class="fa-solid fa-arrow-left"></i> Go Back
+            <!-- Quick Actions -->
+            <div class="error-actions">
+                <a href="{% url 'home' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-home"></i> Back to Home
+                </a>
+                <a href="javascript:history.back()" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-arrow-left"></i> Go Back
                 </a>
             </div>
 
+            <!-- Suggested Categories -->
+            {% if categories %}
+            <div class="error-suggestions">
+                <h3>Or explore these categories:</h3>
+                <div class="error-categories">
+                    {% for category in categories|slice:":4" %}
+                    <a href="{% url 'posts_by_category' category.id %}" class="error-category-link">
+                        <i class="fas fa-folder"></i>
+                        {{ category.category_name }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
         </div>
     </div>
+</div>
 
-    <!-- Theme Toggle Script -->
-    <script>
-        const toggleBtn = document.getElementById("themeToggle");
-        const body = document.body;
+<style>
+    .error-page {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--space-10) 0;
+    }
 
-        // Load saved theme - default to dark mode
-        const savedTheme = localStorage.getItem("theme") || "dark";
-        if (savedTheme === "dark") {
-            body.classList.add("dark-mode");
-            toggleBtn.innerHTML = '<i class="fa-regular fa-lightbulb"></i>';
+    .error-content {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* 404 Illustration */
+    .error-illustration {
+        position: relative;
+        margin-bottom: var(--space-10);
+    }
+
+    .error-number {
+        font-size: clamp(8rem, 20vw, 12rem);
+        font-weight: 900;
+        font-family: var(--font-serif);
+        background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-dark) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+        margin-bottom: var(--space-4);
+        animation: pulse 3s ease-in-out infinite;
+    }
+
+    .error-icon {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+        border-radius: var(--radius-full);
+        background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-dark) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--text-5xl);
+        color: #000;
+        box-shadow: var(--shadow-2xl);
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0px);
         }
 
-        // Toggle theme on click
-        toggleBtn.addEventListener("click", () => {
-            body.classList.toggle("dark-mode");
-            localStorage.setItem(
-                "theme",
-                body.classList.contains("dark-mode") ? "dark" : "light"
-            );
-            toggleBtn.innerHTML = body.classList.contains("dark-mode")
-                ? '<i class="fa-regular fa-lightbulb"></i>'
-                : '<i class="fa-solid fa-moon"></i>';
-        });
-    </script>
+        50% {
+            transform: translateY(-20px);
+        }
+    }
 
-</body>
+    /* Error Message */
+    .error-title {
+        font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
+        color: var(--color-text-primary);
+        margin-bottom: var(--space-4);
+    }
 
-</html>
+    .error-message {
+        font-size: var(--text-xl);
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        margin-bottom: var(--space-8);
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Search Form */
+    .error-search {
+        max-width: 600px;
+        margin: 0 auto var(--space-8);
+    }
+
+    .error-search-form {
+        display: flex;
+        align-items: center;
+        background: var(--color-surface);
+        border-radius: var(--radius-xl);
+        padding: var(--space-4);
+        box-shadow: var(--shadow-xl);
+        border: 2px solid var(--color-border);
+        transition: all var(--transition-base);
+    }
+
+    .error-search-form:focus-within {
+        border-color: var(--brand-primary);
+        box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1), var(--shadow-2xl);
+    }
+
+    .error-search-form .search-icon {
+        color: var(--color-text-tertiary);
+        font-size: var(--text-xl);
+        margin-right: var(--space-4);
+    }
+
+    .error-search-input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        outline: none;
+        font-size: var(--text-lg);
+        color: var(--color-text-primary);
+    }
+
+    .error-search-input::placeholder {
+        color: var(--color-text-tertiary);
+    }
+
+    .error-search-btn {
+        padding: var(--space-3) var(--space-6);
+        background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-dark) 100%);
+        color: #000;
+        border: none;
+        border-radius: var(--radius-md);
+        font-weight: 700;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+    }
+
+    .error-search-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Actions */
+    .error-actions {
+        display: flex;
+        gap: var(--space-4);
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: var(--space-10);
+    }
+
+    /* Suggestions */
+    .error-suggestions {
+        padding-top: var(--space-8);
+        border-top: 1px solid var(--color-border);
+    }
+
+    .error-suggestions h3 {
+        font-size: var(--text-xl);
+        color: var(--color-text-secondary);
+        margin-bottom: var(--space-5);
+    }
+
+    .error-categories {
+        display: flex;
+        gap: var(--space-3);
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .error-category-link {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        padding: var(--space-3) var(--space-5);
+        background: var(--color-surface);
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        color: var(--color-text-primary);
+        font-weight: 600;
+        transition: all var(--transition-fast);
+    }
+
+    .error-category-link:hover {
+        background: var(--brand-primary);
+        color: #000;
+        border-color: var(--brand-primary);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    @media (max-width: 768px) {
+        .error-number {
+            font-size: 6rem;
+        }
+
+        .error-icon {
+            width: 70px;
+            height: 70px;
+            font-size: var(--text-3xl);
+        }
+
+        .error-search-form {
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .error-search-form .search-icon {
+            display: none;
+        }
+
+        .error-search-input {
+            width: 100%;
+            text-align: center;
+        }
+
+        .error-search-btn {
+            width: 100%;
+        }
+
+        .error-actions {
+            flex-direction: column;
+        }
+
+        .error-actions .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}

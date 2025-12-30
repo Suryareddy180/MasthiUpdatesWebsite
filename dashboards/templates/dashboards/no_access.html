@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="no-access-card animated-entrance">
+                    <!-- Icon -->
+                    <div class="no-access-icon">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+
+                    <!-- Header -->
+                    <h2>Dashboard Access Restricted</h2>
+                    <p class="no-access-message">
+                        You don't have permission to access the dashboard.
+                    </p>
+
+                    <!-- Contact Admin Section -->
+                    <div class="contact-admin-box">
+                        <i class="fa-solid fa-envelope"></i>
+                        <h5>Need Access?</h5>
+                        <p>Please contact the administrator to request dashboard permissions.</p>
+                        <a href="mailto:{{ admin_email }}" class="admin-email">
+                            <i class="fa-solid fa-at"></i>
+                            {{ admin_email }}
+                        </a>
+                    </div>
+
+                    <!-- Action Button -->
+                    <a href="{% url 'home' %}" class="visit-site-btn">
+                        <i class="fa-solid fa-globe"></i>
+                        Visit Website
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .animated-entrance {
+        animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Premium styling matching site design */
+    .no-access-card {
+        background: linear-gradient(135deg, #1f2029 0%, #16171d 100%);
+        border: 1px solid rgba(255, 193, 7, 0.2);
+        border-radius: 20px;
+        padding: 50px 40px;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .no-access-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at top right, rgba(255, 193, 7, 0.1), transparent 70%);
+        opacity: 0.5;
+    }
+
+    .no-access-icon {
+        width: 100px;
+        height: 100px;
+        background: rgba(255, 193, 7, 0.1);
+        color: #ffc107;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 30px;
+        font-size: 2.5rem;
+        box-shadow: 0 10px 30px rgba(255, 193, 7, 0.2);
+        position: relative;
+        z-index: 1;
+    }
+
+    .no-access-card h2 {
+        color: #fff;
+        font-weight: 700;
+        margin-bottom: 15px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .no-access-message {
+        color: #aaa;
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .contact-admin-box {
+        background: rgba(255, 193, 7, 0.05);
+        border-left: 4px solid #ffc107;
+        border-radius: 12px;
+        padding: 25px;
+        margin: 30px 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    .contact-admin-box i {
+        font-size: 2rem;
+        color: #ffc107;
+        margin-bottom: 10px;
+    }
+
+    .contact-admin-box h5 {
+        color: #ffc107;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .contact-admin-box p {
+        color: #ccc;
+        margin-bottom: 0;
+        font-size: 0.95rem;
+    }
+
+    .admin-email {
+        display: inline-block;
+        background: rgba(255, 193, 7, 0.15);
+        color: #ffc107;
+        padding: 12px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        margin-top: 15px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 193, 7, 0.3);
+    }
+
+    .admin-email:hover {
+        background: rgba(255, 193, 7, 0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 193, 7, 0.2);
+        color: #ffc107;
+        text-decoration: none;
+    }
+
+    .visit-site-btn {
+        display: inline-block;
+        background: linear-gradient(135deg, #ffc107, #ff9800);
+        color: #000;
+        padding: 15px 40px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-top: 20px;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba(255, 193, 7, 0.3);
+        position: relative;
+        z-index: 1;
+    }
+
+    .visit-site-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(255, 193, 7, 0.4);
+        color: #000;
+        text-decoration: none;
+    }
+
+    .visit-site-btn i {
+        margin-right: 8px;
+    }
+
+    /* Dark mode already applied, but ensure compatibility */
+    body.dark-mode .no-access-card {
+        background: linear-gradient(135deg, #1f2029 0%, #16171d 100%);
+    }
+
+    body.dark-mode .contact-admin-box p {
+        color: #ccc;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .no-access-card {
+            padding: 40px 30px;
+        }
+
+        .no-access-icon {
+            width: 80px;
+            height: 80px;
+            font-size: 2rem;
+        }
+
+        .no-access-card h2 {
+            font-size: 1.5rem;
+        }
+
+        .visit-site-btn {
+            padding: 12px 30px;
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}

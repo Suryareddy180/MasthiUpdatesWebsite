@@ -1,20 +1,26 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard-pages.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="dashboard-wrapper">
+<div class="dashboard-layout">
     <div class="row g-0">
-        <!-- Left Sidebar -->
-        <div class="col-lg-3 col-md-4 col-12">
+
+        <!-- Dashboard Sidebar -->
+        <div class="col-lg-3 col-md-4">
             <div class="dashboard-sidebar">
+
                 <!-- Sidebar Header -->
                 <div class="sidebar-header">
                     <div class="sidebar-brand">
-                        <i class="fa-solid fa-gauge-high"></i>
+                        <i class="fas fa-gauge-high"></i>
                         <span>DASHBOARD</span>
                     </div>
                     <p class="sidebar-user">
-                        <i class="fa-solid fa-user-circle"></i>
+                        <i class="fas fa-user-circle"></i>
                         Welcome, <strong>{{ request.user.username }}</strong>
                     </p>
                 </div>
@@ -23,38 +29,71 @@
                 <nav class="sidebar-nav">
                     <div class="nav-section">
                         <span class="nav-section-title">MENU</span>
+
                         <a href="{% url 'dashboard' %}"
                             class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-                            <i class="fa-solid fa-home"></i>
+                            <i class="fas fa-home"></i>
                             <span>Dashboard</span>
-                            <i class="fa-solid fa-chevron-right arrow"></i>
+                            <i class="fas fa-chevron-right arrow"></i>
                         </a>
+
+                        {% if perms.auth.view_user %}
+                        <a href="{% url 'users' %}"
+                            class="sidebar-link {% if request.resolver_match.url_name == 'users' %}active{% endif %}">
+                            <i class="fas fa-users"></i>
+                            <span>Users</span>
+                            <i class="fas fa-chevron-right arrow"></i>
+                        </a>
+                        {% endif %}
+
+                        {% if perms.blogs.view_category %}
                         <a href="{% url 'categories' %}"
                             class="sidebar-link {% if request.resolver_match.url_name == 'categories' %}active{% endif %}">
-                            <i class="fa-solid fa-folder"></i>
+                            <i class="fas fa-folder"></i>
                             <span>Categories</span>
-                            <i class="fa-solid fa-chevron-right arrow"></i>
+                            <i class="fas fa-chevron-right arrow"></i>
                         </a>
+                        {% endif %}
+
+                        {% if perms.blogs.view_blog %}
                         <a href="{% url 'posts' %}"
                             class="sidebar-link {% if request.resolver_match.url_name == 'posts' %}active{% endif %}">
-                            <i class="fa-solid fa-newspaper"></i>
+                            <i class="fas fa-newspaper"></i>
                             <span>Posts</span>
-                            <i class="fa-solid fa-chevron-right arrow"></i>
+                            <i class="fas fa-chevron-right arrow"></i>
                         </a>
+                        {% endif %}
                     </div>
 
                     <div class="nav-section">
                         <span class="nav-section-title">QUICK LINKS</span>
+
+                        {% if perms.blogs.add_blog %}
+                        <a href="{% url 'add_post' %}" class="sidebar-link">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Add New Post</span>
+                            <i class="fas fa-arrow-right arrow"></i>
+                        </a>
+                        {% endif %}
+
+                        {% if perms.blogs.add_category %}
+                        <a href="{% url 'add_category' %}" class="sidebar-link">
+                            <i class="fas fa-folder-plus"></i>
+                            <span>Add Category</span>
+                            <i class="fas fa-arrow-right arrow"></i>
+                        </a>
+                        {% endif %}
+
                         <a href="{% url 'home' %}" class="sidebar-link">
-                            <i class="fa-solid fa-globe"></i>
+                            <i class=" fas fa-globe"></i>
                             <span>View Website</span>
-                            <i class="fa-solid fa-external-link arrow"></i>
+                            <i class="fas fa-external-link arrow"></i>
                         </a>
                     </div>
 
                     <div class="nav-section mt-auto">
                         <a href="{% url 'logout' %}" class="sidebar-link logout-link">
-                            <i class="fa-solid fa-sign-out-alt"></i>
+                            <i class="fas fa-sign-out-alt"></i>
                             <span>Logout</span>
                         </a>
                     </div>
@@ -63,8 +102,9 @@
         </div>
 
         <!-- Main Content -->
-        <div class="col-lg-9 col-md-8 col-12">
+        <div class="col-lg-9 col-md-8">
             <div class="dashboard-main">
+
                 <!-- Top Bar -->
                 <div class="dashboard-topbar">
                     <div class="topbar-left">
@@ -73,13 +113,13 @@
                         </h1>
                         <nav class="breadcrumb-nav">
                             <a href="{% url 'dashboard' %}">Home</a>
-                            <i class="fa-solid fa-chevron-right"></i>
+                            <i class="fas fa-chevron-right"></i>
                             <span>{% block breadcrumb %}Dashboard{% endblock %}</span>
                         </nav>
                     </div>
                     <div class="topbar-right">
                         <span class="current-date">
-                            <i class="fa-solid fa-calendar"></i>
+                            <i class="fas fa-calendar"></i>
                             <span id="currentDate"></span>
                         </span>
                     </div>
@@ -96,351 +136,7 @@
 
 <script>
     // Display current date
-    const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
-    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', options);
+    const displayOptions = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', displayOptions);
 </script>
-
-<style>
-    /* Dashboard Wrapper */
-    .dashboard-wrapper {
-        min-height: calc(100vh - 200px);
-        margin: -1rem -15px;
-    }
-
-    /* Sidebar */
-    .dashboard-sidebar {
-        background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
-        min-height: calc(100vh - 180px);
-        display: flex;
-        flex-direction: column;
-        position: sticky;
-        top: 0;
-    }
-
-    .sidebar-header {
-        padding: 25px 20px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .sidebar-brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        color: var(--primary-gold);
-        font-size: 1.3rem;
-        font-weight: 800;
-        letter-spacing: 1px;
-    }
-
-    .sidebar-brand i {
-        font-size: 1.5rem;
-    }
-
-    .sidebar-user {
-        margin: 15px 0 0;
-        color: #8892b0;
-        font-size: 0.85rem;
-    }
-
-    .sidebar-user i {
-        margin-right: 6px;
-    }
-
-    .sidebar-user strong {
-        color: #fff;
-    }
-
-    /* Navigation */
-    .sidebar-nav {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        padding: 15px 0;
-    }
-
-    .nav-section {
-        padding: 0 15px;
-        margin-bottom: 20px;
-    }
-
-    .nav-section-title {
-        display: block;
-        color: #5a6a8a;
-        font-size: 0.7rem;
-        font-weight: 700;
-        letter-spacing: 1.5px;
-        padding: 10px 10px 5px;
-        text-transform: uppercase;
-    }
-
-    .sidebar-link {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 15px;
-        color: #8892b0;
-        text-decoration: none;
-        border-radius: 10px;
-        margin-bottom: 4px;
-        transition: all 0.3s ease;
-        position: relative;
-    }
-
-    .sidebar-link i:first-child {
-        width: 20px;
-        text-align: center;
-        font-size: 1rem;
-    }
-
-    .sidebar-link span {
-        flex: 1;
-    }
-
-    .sidebar-link .arrow {
-        font-size: 0.7rem;
-        opacity: 0;
-        transition: all 0.3s ease;
-    }
-
-    .sidebar-link:hover {
-        background: rgba(255, 193, 7, 0.1);
-        color: #fff;
-    }
-
-    .sidebar-link:hover .arrow {
-        opacity: 1;
-        transform: translateX(3px);
-    }
-
-    .sidebar-link.active {
-        background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.1));
-        color: var(--primary-gold);
-        font-weight: 600;
-    }
-
-    .sidebar-link.active::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 4px;
-        height: 60%;
-        background: var(--primary-gold);
-        border-radius: 0 4px 4px 0;
-    }
-
-    .sidebar-link.active .arrow {
-        opacity: 1;
-    }
-
-    .logout-link {
-        margin-top: auto;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        padding-top: 15px;
-        margin-top: 15px;
-    }
-
-    .logout-link:hover {
-        background: rgba(220, 53, 69, 0.15);
-        color: #dc3545;
-    }
-
-    /* Main Content */
-    .dashboard-main {
-        padding: 25px;
-        background: var(--light-bg);
-        min-height: calc(100vh - 180px);
-    }
-
-    .dark-mode .dashboard-main {
-        background: #0f0f1a;
-    }
-
-    /* Topbar */
-    .dashboard-topbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 15px;
-        margin-bottom: 25px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    }
-
-    .dark-mode .dashboard-topbar {
-        border-bottom-color: rgba(255, 255, 255, 0.08);
-    }
-
-    .page-title {
-        font-size: 1.6rem;
-        font-weight: 800;
-        color: #1a1a2e;
-        margin: 0;
-    }
-
-    .dark-mode .page-title {
-        color: #fff;
-    }
-
-    .breadcrumb-nav {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.85rem;
-        color: #666;
-    }
-
-    .dark-mode .breadcrumb-nav {
-        color: #888;
-    }
-
-    .breadcrumb-nav a {
-        color: var(--primary-gold);
-    }
-
-    .breadcrumb-nav i {
-        font-size: 0.6rem;
-    }
-
-    .current-date {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: #666;
-        font-size: 0.9rem;
-        background: rgba(0, 0, 0, 0.05);
-        padding: 8px 15px;
-        border-radius: 20px;
-    }
-
-    .dark-mode .current-date {
-        background: rgba(255, 255, 255, 0.05);
-        color: #aaa;
-    }
-
-    /* Dashboard Content */
-    .dashboard-content {
-        background: #fff;
-        border-radius: 16px;
-        padding: 25px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    }
-
-    .dark-mode .dashboard-content {
-        background: rgba(30, 30, 40, 0.8);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Stats Cards */
-    .stats-row {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
-    }
-
-    .stat-card {
-        background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
-        border-radius: 16px;
-        padding: 25px;
-        color: #fff;
-        text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
-
-    .stat-card h3 {
-        color: var(--primary-gold);
-        font-size: 2.8rem;
-        font-weight: 800;
-        margin-bottom: 10px;
-    }
-
-    .stat-card p {
-        color: #8892b0;
-        margin: 0;
-        font-size: 0.95rem;
-    }
-
-    /* Tables */
-    .table {
-        margin-bottom: 0;
-    }
-
-    .table thead th {
-        background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
-        color: var(--primary-gold);
-        border: none;
-        padding: 15px;
-        font-weight: 600;
-    }
-
-    .table tbody td {
-        padding: 15px;
-        vertical-align: middle;
-    }
-
-    .dark-mode .table tbody td {
-        color: #ccc;
-        border-color: rgba(255, 255, 255, 0.1);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .dashboard-wrapper {
-            margin: 0 -15px;
-        }
-
-        .dashboard-sidebar {
-            min-height: auto;
-            position: relative;
-        }
-
-        .sidebar-nav {
-            flex-direction: row;
-            flex-wrap: wrap;
-            padding: 10px;
-        }
-
-        .nav-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            padding: 5px;
-            margin-bottom: 0;
-        }
-
-        .nav-section-title {
-            display: none;
-        }
-
-        .sidebar-link {
-            padding: 10px 15px;
-            flex: 1;
-            justify-content: center;
-        }
-
-        .sidebar-link span,
-        .sidebar-link .arrow {
-            display: none;
-        }
-
-        .sidebar-link i:first-child {
-            font-size: 1.2rem;
-        }
-
-        .dashboard-main {
-            padding: 15px;
-        }
-
-        .page-title {
-            font-size: 1.3rem;
-        }
-    }
-</style>
 {% endblock %}

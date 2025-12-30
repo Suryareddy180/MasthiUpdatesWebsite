@@ -3,11 +3,15 @@ from django.shortcuts import render,redirect
 
 from blogs.models import Category, Blog
 from assignments.models import About
-from .forms import RegistrationForm
+from .forms import RegistrationForm, LoginForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import auth
 
 def home(request):
+    # Removed forced redirect to dashboard for authenticated users
+    # if request.user.is_authenticated and not request.GET.get('public'):
+    #     return redirect('dashboard')
+    
     featured_posts=Blog.objects.filter(is_featured=True,status='Published').order_by('-created_at','-updated_at')
     posts = Blog.objects.filter(is_featured=False,status='Published').order_by('-created_at','-updated_at')
     
@@ -38,23 +42,39 @@ def register(request):
 
 def login(request):
     if request.method == "POST":
-        form = AuthenticationForm(request, request.POST)
+        form = LoginForm(request, request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            from django.contrib import auth
             user = auth.authenticate(username=username, password=password)
             if user is not None:
                 auth.login(request, user)
+                
+                # Handle "Remember Me" functionality
+                if not request.POST.get('remember'):
+                    # Session expires when browser closes
+                    request.session.set_expiry(0)
+                else:
+                    # Session lasts for 2 weeks (1209600 seconds)
+                    request.session.set_expiry(1209600)
+                
                 return redirect('dashboard')
     else:
-        form = AuthenticationForm()
+        form = LoginForm()
     context = {
         'form': form
     }
     return render(request, 'login.html', context)
 
+def terms(request):
+    from datetime import datetime
+    context = {
+        'current_date': datetime.now()
+    }
+    return render(request, 'terms.html', context)
+
 def logout(request):
     auth.logout(request)
     return redirect('home')
     
+

@@ -65,3 +65,10 @@ steps of making of Mastie Updates :-
 51. Edit Post
 52. Delete Post
 53. Git Push
+54. Manager Dashboard
+55. Conditionally show the Users
+56. add user form
+57. Prevent editor to perform Manger Related Permissions
+58. Edit User
+59. Delete User
+60. Git Push

@@ -26,85 +26,110 @@
     <link href="{% static 'css/homepage-cinematic.css' %}" rel="stylesheet">
     <link href="{% static 'css/slideshow-netflix-style.css' %}" rel="stylesheet">
     <link href="{% static 'css/advanced-ui.css' %}" rel="stylesheet">
+    <link href="{% static 'css/advanced-ui.css' %}" rel="stylesheet">
+    <link href="{% static 'css/professional-header-footer.css' %}" rel="stylesheet">
+
+    {% block extra_css %}{% endblock %}
 </head>
+
 
 <body>
 
-    <div class="container">
-
-        <!-- ================= HEADER ================= -->
-        <header class="blog-header py-3 mb-3">
+    <!-- ================= ENHANCED HEADER ================= -->
+    <header class="site-header" id="siteHeader">
+        <div class="container">
             <div class="row align-items-center header-row">
 
-                <!-- Logo -->
-                <div class="col-6 col-sm-4 col-md-3">
-                    <a href="{% url 'home' %}" class="blog-header-logo">
-                        <img src="{% static 'images/logo.png' %}" class="site-logo" alt="Masthi Updates Logo">
-                        <div class="brand-wrapper">
-                            <span class="brand-text">MASTHI UPDATES</span>
-                            <span class="brand-tagline d-none d-lg-block">Your Cinema Universe</span>
+                <!-- Logo & Brand -->
+                <div class="col-5 col-sm-4 col-md-3">
+                    <a href="{% url 'home' %}" class="header-logo">
+                        <img src="{% static 'images/logo.png' %}" class="logo-img" alt="Logo">
+                        <div class="brand-info">
+                            <span class="brand-name">MASTHI UPDATES</span>
+                            <span class="brand-tagline d-none d-lg-block">
+                                <i class="fa-solid fa-film"></i> For Movie Lovers
+                            </span>
                         </div>
                     </a>
                 </div>
 
-                <!-- SEARCH (center on md+) -->
+                <!-- Search Bar -->
                 <div class="col-md-5 d-none d-md-block">
-                    <form action="{% url 'search' %}" method="get" class="header-search-form">
-                        <div class="header-search">
-                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                            <input type="text" class="search-input" name="keyword"
-                                placeholder="Search movies, news, reviews…">
-                            <button type="submit" class="search-button">
-                                <i class="fa-solid fa-magnifying-glass"></i> Go!
-                            </button>
+                    <form action="{% url 'search' %}" method="get" class="search-form">
+                        <div class="search-box">
+                            <i class="fa-solid fa-search search-icon"></i>
+                            <input type="text" class="search-input" name="keyword" placeholder="Search movies, news..."
+                                autocomplete="off">
+                            <button type="submit" class="search-btn">Go!</button>
                         </div>
                     </form>
                 </div>
 
-                <!-- Action Buttons -->
-                <div class="col-6 col-sm-8 col-md-4 d-flex justify-content-end align-items-center gap-2">
-                    <!-- Theme Toggle (always visible) -->
-                    <button id="themeToggle" class="btn btn-sm btn-light header-btn" title="Toggle Theme">
-                        <i class="fa-solid fa-moon"></i>
-                    </button>
+                <!-- Actions -->
+                <div class="col-7 col-sm-8 col-md-4 d-flex justify-content-end align-items-center">
+                    <div class="header-actions">
 
-                    <!-- Search icon for mobile (opens search) -->
-                    <button class="btn btn-sm btn-light header-btn d-md-none" id="mobileSearchToggle" title="Search">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </button>
 
-                    {% if user.is_authenticated %}
-                    <!-- Logged In User -->
-                    <a href="{% url 'dashboard' %}" class="auth-btn dashboard-btn" title="Dashboard">
-                        <i class="fa-solid fa-gauge-high"></i>
-                        <span class="d-none d-md-inline">Dashboard</span>
-                    </a>
-                    <a href="{% url 'logout' %}" class="auth-btn logout-btn" title="Logout">
-                        <i class="fa-solid fa-sign-out-alt"></i>
-                        <span class="d-none d-lg-inline">Logout</span>
-                    </a>
-                    {% endif %}
+
+                        <!-- Theme Toggle -->
+                        <button id="themeToggle" class="action-btn" title="Toggle Theme">
+                            <i class="fa-solid fa-moon"></i>
+                        </button>
+
+                        {% if user.is_authenticated %}
+                        <!-- Visit Site (Only shown in Dashboard) -->
+                        {% if '/dashboard/' in request.path %}
+                        <a href="{% url 'home' %}" class="action-btn-link" title="Visit Site">
+                            <i class="fa-solid fa-earth-americas"></i>
+                            <span class="d-none d-xl-inline">Visit Site</span>
+                        </a>
+                        {% endif %}
+
+                        <!-- Dashboard (Only shown on Website) -->
+                        {% if '/dashboard/' not in request.path %}
+                        <a href="{% url 'dashboard' %}" class="action-btn-link" title="Dashboard">
+                            <i class="fa-solid fa-gauge-high"></i>
+                            <span class="d-none d-xl-inline">Dashboard</span>
+                        </a>
+                        {% endif %}
+                        <!-- Logout -->
+                        <a href="{% url 'logout' %}" class="action-btn-link logout" title="Logout">
+                            <i class="fa-solid fa-sign-out-alt"></i>
+                            <span class="d-none d-xl-inline">Logout</span>
+                        </a>
+                        {% else %}
+                        <!-- Login/Register -->
+                        <a href="{% url 'login' %}" class="auth-btn login">Log In</a>
+                        <a href="{% url 'register' %}" class="auth-btn register">Sign Up</a>
+                        {% endif %}
+
+                        <!-- Mobile Search Toggle -->
+                        <button class="action-btn d-md-none ml-2" id="mobileSearchToggle">
+                            <i class="fa-solid fa-search"></i>
+                        </button>
+                    </div>
                 </div>
 
             </div>
 
-            <!-- Mobile Search (expandable) -->
+            <!-- Mobile Search -->
             <div class="row mt-2 d-md-none" id="mobileSearchRow" style="display: none !important;">
                 <div class="col-12">
-                    <form action="{% url 'search' %}" method="get" class="header-search-form">
-                        <div class="header-search">
-                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                            <input type="text" class="search-input" name="keyword" placeholder="Search…">
-                            <button type="submit" class="search-button">
-                                <i class="fa-solid fa-magnifying-glass"></i> Go!
-                            </button>
+                    <form action="{% url 'search' %}" method="get" class="search-form">
+                        <div class="search-box">
+                            <i class="fa-solid fa-search search-icon"></i>
+                            <input type="text" class="search-input" name="keyword" placeholder="Search...">
+                            <button type="submit" class="search-btn">Go!</button>
                         </div>
                     </form>
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
 
+    <div class="container">
         <!-- ================= CATEGORIES ================= -->
+        {% if '/dashboard/' not in request.path and '/login/' not in request.path and '/register/' not in request.path %}
         {% if categories %}
         <div class="nav-scroller mb-3 mb-lg-4 position-relative">
             <nav class="nav d-flex flex-nowrap">
@@ -122,99 +147,104 @@
             </nav>
         </div>
         {% endif %}
+        {% endif %}
+
 
         {% block content %}{% endblock %}
 
     </div>
 
-    <!-- ================= FOOTER ================= -->
-    <footer class="blog-footer">
-        <div class="footer-container">
+    <!-- ================= ENHANCED FOOTER ================= -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="container">
+                <div class="row">
 
-            <!-- Footer Top -->
-            <div class="footer-top">
-                <div class="container">
-                    <div class="row">
+                    <!-- Brand & About -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="footer-brand">
+                            <img src="{% static 'images/logo.png' %}" alt="Logo" class="footer-logo">
+                            <h4>MASTHI UPDATES</h4>
+                        </div>
+                        <p class="footer-desc">
+                            For movie lovers across India - bringing you cinema updates in English, Telugu, Tamil,
+                            Hindi, Kannada, Malayalam, and more regional languages.
+                        </p>
+                    </div>
 
-                        <!-- Brand Column -->
-                        <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
-                            <div class="footer-brand">
-                                <img src="{% static 'images/logo.png' %}" alt="Masthi Updates" class="footer-logo">
-                                <h4>Masthi Updates</h4>
+                    <!-- Quick Links -->
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <h5 class="footer-title">Quick Links</h5>
+                        <ul class="footer-links">
+                            <li><a href="{% url 'home' %}"><i class="fa-solid fa-angle-right"></i> Home</a></li>
+                            <li><a href="{% url 'search' %}"><i class="fa-solid fa-angle-right"></i> Search</a></li>
+                            <li><a href="{% url 'terms' %}"><i class="fa-solid fa-angle-right"></i> Terms</a></li>
+                            {% if user.is_authenticated %}
+                            <li><a href="{% url 'dashboard' %}"><i class="fa-solid fa-angle-right"></i> Dashboard</a>
+                            </li>
+                            {% else %}
+                            <li><a href="{% url 'login' %}"><i class="fa-solid fa-angle-right"></i> Login</a></li>
+                            <li><a href="{% url 'register' %}"><i class="fa-solid fa-angle-right"></i> Register</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+
+
+
+                    <!-- Categories & Connect -->
+                    <div class="col-lg-5 col-lg-5 col-md-12 mb-4">
+                        <div class="row">
+                            <!-- Categories -->
+                            <div class="col-sm-6 mb-4 mb-sm-0">
+                                <h5 class="footer-title">Categories</h5>
+                                <ul class="footer-links">
+                                    {% for cat in categories %}
+                                    {% if forloop.counter <= 6 %} <li><a href="{% url 'posts_by_category' cat.id %}"><i
+                                                class="fa-solid fa-angle-right"></i> {{ cat.category_name }}</a></li>
+                                        {% endif %}
+                                        {% endfor %}
+                                </ul>
                             </div>
-                            <p class="footer-about">
-                                Your ultimate destination for cinema news, reviews, and entertainment updates.
-                                Hollywood, Bollywood, Tollywood & beyond! 🎬🌍
-                            </p>
-                        </div>
 
-                        <!-- Quick Links -->
-                        <div class="col-lg-2 col-md-6 col-6 mb-4 mb-lg-0">
-                            <h5 class="footer-heading">Quick Links</h5>
-                            <ul class="footer-links">
-                                <li><a href="{% url 'home' %}"><i class="fa-solid fa-chevron-right"></i> Home</a></li>
-                                <li><a href="{% url 'search' %}"><i class="fa-solid fa-chevron-right"></i> Search</a>
-                                </li>
-                                <li><a href="{% url 'login' %}"><i class="fa-solid fa-chevron-right"></i> Login</a></li>
-                                <li><a href="{% url 'register' %}"><i class="fa-solid fa-chevron-right"></i>
-                                        Register</a></li>
-                            </ul>
-                        </div>
+                            <!-- Connect -->
+                            <div class="col-sm-6">
+                                <h5 class="footer-title">Connect With Us</h5>
+                                <div class="social-links-compact">
+                                    <a></a>
+                                    <a href="https://www.instagram.com/masthi__updates" target="_blank" rel="noopener"
+                                        class="social-compact instagram" title="Instagram">
+                                        <i class="fa-brands fa-instagram"></i>
+                                    </a>
+                                    <a href="https://youtube.com/@cine_muchatluu" target="_blank" rel="noopener"
+                                        class="social-compact youtube" title="YouTube">
+                                        <i class="fa-brands fa-youtube"></i>
+                                    </a>
+                                    <a href="https://x.com/cine_muchatlu" target="_blank" rel="noopener"
+                                        class="social-compact twitter" title="Twitter">
+                                        <i class="fa-brands fa-x-twitter"></i>
+                                    </a>
 
-                        <!-- Categories -->
-                        <div class="col-lg-3 col-md-6 col-6 mb-4 mb-lg-0">
-                            <h5 class="footer-heading">Categories</h5>
-                            <ul class="footer-links">
-                                {% for cat in categories %}
-                                {% if forloop.counter <= 4 %} <li><a href="{% url 'posts_by_category' cat.id %}"><i
-                                            class="fa-solid fa-chevron-right"></i> {{ cat.category_name }}</a></li>
-                                    {% endif %}
-                                    {% endfor %}
-                            </ul>
-                        </div>
-
-                        <!-- Connect -->
-                        <div class="col-lg-3 col-md-6">
-                            <h5 class="footer-heading">Connect With Us</h5>
-                            <p class="footer-connect-text">Follow us for worldwide cinema updates!</p>
-                            <div class="footer-socials-modern">
-                                <a href="https://www.instagram.com/masthi__updates" target="_blank"
-                                    class="social-icon instagram" title="Instagram">
-                                    <i class="fa-brands fa-instagram"></i>
-                                </a>
-                                <a href="https://youtube.com/@cine_muchatluu" target="_blank"
-                                    class="social-icon youtube" title="YouTube">
-                                    <i class="fa-brands fa-youtube"></i>
-                                </a>
-                                <a href="https://x.com/cine_muchatlu" target="_blank" class="social-icon twitter"
-                                    title="Twitter">
-                                    <i class="fa-brands fa-x-twitter"></i>
-                                </a>
+                                </div>
                             </div>
                         </div>
+                    </div>
 
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-left mb-2 mb-md-0">
+                        <p>&copy; <span id="year"></span> Masthi Updates. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-right">
+                        <p>Made with <i class="fa-solid fa-heart pulse-heart"></i> for Cinema Lovers</p>
                     </div>
                 </div>
             </div>
-
-            <!-- Footer Bottom -->
-            <div class="footer-bottom">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-md-6 text-center text-md-left">
-                            <p class="footer-copy">
-                                © <span id="year"></span> Masthi Updates. All rights reserved.
-                            </p>
-                        </div>
-                        <div class="col-md-6 text-center text-md-right">
-                            <p class="footer-made">
-                                Made with <i class="fa-solid fa-heart text-danger"></i> for Cinema Lovers
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </footer>
 
@@ -262,8 +292,32 @@
             });
         }
 
+        // Header scroll adaptation
+        const siteHeader = document.getElementById("siteHeader");
+        if (siteHeader) {
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 50) {
+                    siteHeader.classList.add("scrolled");
+                } else {
+                    siteHeader.classList.remove("scrolled");
+                }
+            });
+        }
+
         // Year in footer
         document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+
+    <!-- Bootstrap JS for Dropdowns -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Other Scripts -->
+    <script>
+        // Notification Bell Click
+        document.getElementById('notifBtn')?.addEventListener('click', function () {
+            alert('Notifications feature coming soon! \u26a1\n\nStay tuned for:\n\u2022 Breaking news alerts\n\u2022 New release notifications\n\u2022 Personalized updates');
+        });
     </script>
 
 </body>

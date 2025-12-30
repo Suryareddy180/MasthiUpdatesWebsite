@@ -67,28 +67,15 @@
 </section>
 {% endif %}
 
-<!-- ================= TRENDING STRIP ================= -->
-{% if posts %}
-<section class="trending-strip">
-    <div class="trending-label">
-        <i class="fa-solid fa-bolt"></i> Trending Now
-    </div>
-    <div class="trending-scroll">
-        {% for post in posts|slice:":5" %}
-        <a href="{% url 'blogs' post.slug %}" class="trending-item">
-            {{ post.title|truncatewords:6 }}
-        </a>
-        {% endfor %}
-    </div>
-</section>
-{% endif %}
+
 
 <!-- ================= MAIN CONTENT GRID ================= -->
 <div class="content-grid-wrapper">
 
-    <!-- MAIN CONTENT -->
+    <!-- ================= MAIN CONTENT (Latest Updates) ================= -->
     <main class="primary-content">
 
+        <!-- Section Header -->
         <div class="content-section-header">
             <div class="header-top">
                 <h2><i class="fa-solid fa-fire-flame-curved"></i> Latest Updates</h2>
@@ -96,6 +83,8 @@
             </div>
             <p class="section-tagline">Fresh cinema news & entertainment stories</p>
         </div>
+
+        <!-- Articles List -->
 
         {% if posts %}
         <div class="articles-showcase">
@@ -130,7 +119,7 @@
                     <h3 class="article-headline">
                         <a href="{% url 'blogs' post.slug %}">{{ post.title }}</a>
                     </h3>
-                    <p class="article-snippet">{{ post.short_description|truncatewords:18 }}</p>
+
                     <a href="{% url 'blogs' post.slug %}" class="read-link">
                         Continue Reading <i class="fa-solid fa-chevron-right"></i>
                     </a>
@@ -148,21 +137,20 @@
 
     </main>
 
-    <!-- SIDEBAR -->
+    <!-- ================= SIDEBAR ================= -->
     <aside class="content-sidebar">
 
-        <!-- About Widget -->
-        <div class="widget-box about-box">
-            <h3 class="widget-heading">
-                <i class="fa-solid fa-circle-info"></i> About Us
-            </h3>
-            <div class="widget-body">
-                {% if about %}
-                <p>{{ about.about_description }}</p>
-                {% else %}
-                <p>Your ultimate destination for cinema news, reviews, and entertainment updates from around the world.
-                </p>
-                {% endif %}
+        <!-- CTA Widget (Priority: Top for visibility) -->
+        <div class="widget-box cta-box">
+            <div class="cta-content">
+                <div class="cta-icon-circle">
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+                <h4>Never Miss Updates!</h4>
+                <p>Follow us for instant cinema news</p>
+                <a href="https://www.instagram.com/masthi__updates" target="_blank" class="cta-action-btn">
+                    <i class="fa-brands fa-instagram"></i> Follow Now
+                </a>
             </div>
         </div>
 
@@ -177,8 +165,8 @@
                     {% for category in categories %}
                     <li>
                         <a href="{% url 'posts_by_category' category.id %}" class="category-item">
+                            <i class="fa-regular fa-folder-open category-icon"></i>
                             <span class="category-label">{{ category.category_name }}</span>
-                            <span class="category-badge">{{ category.post_count|default:0 }}</span>
                         </a>
                     </li>
                     {% endfor %}
@@ -187,7 +175,7 @@
         </div>
         {% endif %}
 
-        <!-- Social Widget -->
+        <!-- Social Connect Widget -->
         <div class="widget-box social-connect-box">
             <h3 class="widget-heading">
                 <i class="fa-solid fa-heart"></i> Connect
@@ -211,17 +199,18 @@
             </div>
         </div>
 
-        <!-- CTA Widget -->
-        <div class="widget-box cta-box">
-            <div class="cta-content">
-                <div class="cta-icon-circle">
-                    <i class="fa-solid fa-bell"></i>
-                </div>
-                <h4>Never Miss Updates!</h4>
-                <p>Follow us for instant cinema news</p>
-                <a href="https://www.instagram.com/masthi__updates" target="_blank" class="cta-action-btn">
-                    <i class="fa-brands fa-instagram"></i> Follow Now
-                </a>
+        <!-- About Widget -->
+        <div class="widget-box about-box">
+            <h3 class="widget-heading">
+                <i class="fa-solid fa-circle-info"></i> About Us
+            </h3>
+            <div class="widget-body">
+                {% if about %}
+                <p>{{ about.about_description }}</p>
+                {% else %}
+                <p>Your ultimate destination for cinema news, reviews, and entertainment updates from around the world.
+                </p>
+                {% endif %}
             </div>
         </div>
 
