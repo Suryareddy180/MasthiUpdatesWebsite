@@ -32,6 +32,8 @@ urlpatterns = [
     #search endpoint - must come BEFORE blogs/<slug> to avoid conflict
     path('blogs/search/',BlogsViews.search , name ='search'),
     path('blogs/<slug:slug>/',BlogsViews.blogs , name ='blogs'),
+    path('comment/edit/<int:comment_id>/', BlogsViews.edit_comment, name='edit_comment'),
+    path('comment/delete/<int:comment_id>/', BlogsViews.delete_comment, name='delete_comment'),
     path('register/',views.register,name='register'),
     path('login/',views.login,name='login'),
     path('logout/',views.logout,name='logout'),

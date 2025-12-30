@@ -1,5 +1,3 @@
-from tkinter import Image
-
 from django.contrib import admin
 from blogs.models import *
 
@@ -12,3 +10,4 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ["category_name","created_at","updated_at"]
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Blog,BlogAdmin)
+admin.site.register(Comment)

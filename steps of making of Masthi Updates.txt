@@ -72,3 +72,9 @@ steps of making of Mastie Updates :-
 58. Edit User
 59. Delete User
 60. Git Push
+61. Comments Setup
+62. Comments Table
+63. Add Comment
+64. Edit Comment
+65. Delete Comment
+66. Git Push

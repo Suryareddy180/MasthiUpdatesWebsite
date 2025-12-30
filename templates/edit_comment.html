@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="container mt-5 mb-5 space-top">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="edit-comment-box" style="
+                background: #1a1a1a; 
+                padding: 2rem; 
+                border-radius: 15px; 
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+
+                <h3 style="color: var(--primary-gold); margin-bottom: 1.5rem; font-weight: 700;">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit Your Comment
+                </h3>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="comment" class="form-label" style="color: #ccc;">Your Comment</label>
+                        <textarea name="comment" id="comment" rows="5" class="form-control" style="
+                            background: rgba(255,255,255,0.05); 
+                            border: 1px solid rgba(255,255,255,0.1); 
+                            color: #fff; 
+                            border-radius: 8px;">{{ comment.comment }}</textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'blogs' comment.blog.slug %}" class="btn text-white"
+                            style="text-decoration: underline;">Cancel</a>
+                        <button type="submit" class="hero-primary-btn" style="border:none; cursor: pointer;">
+                            <i class="fa-solid fa-save"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Inline styles for this specific page if needed, or rely on global CSS */
+    .space-top {
+        padding-top: 100px;
+        /* Account for fixed header */
+    }
+</style>
+{% endblock %}

@@ -50,4 +50,45 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Unique prefix for this form's storage keys
+        const STORAGE_PREFIX = 'register_form_';
+        const form = document.querySelector('.auth-form');
+
+        if (!form) return;
+
+        const inputs = form.querySelectorAll('input:not([type="password"]):not([type="hidden"]), select, textarea');
+
+        // Restore data
+        inputs.forEach(input => {
+            if (input.name === 'csrfmiddlewaretoken') return;
+
+            const savedValue = sessionStorage.getItem(STORAGE_PREFIX + input.name);
+            if (savedValue !== null) {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    input.checked = (savedValue === 'true');
+                } else {
+                    input.value = savedValue;
+                }
+            }
+
+            // Save data on change
+            input.addEventListener('input', function () {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    sessionStorage.setItem(STORAGE_PREFIX + input.name, input.checked);
+                } else {
+                    sessionStorage.setItem(STORAGE_PREFIX + input.name, input.value);
+                }
+            });
+        });
+
+        // Clear data on submit "until user click the register button"
+        form.addEventListener('submit', function () {
+            inputs.forEach(input => {
+                sessionStorage.removeItem(STORAGE_PREFIX + input.name);
+            });
+        });
+    });
+</script>
 {% endblock %}

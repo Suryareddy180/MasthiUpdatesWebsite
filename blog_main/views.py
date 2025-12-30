@@ -58,6 +58,13 @@ def login(request):
                     # Session lasts for 2 weeks (1209600 seconds)
                     request.session.set_expiry(1209600)
                 
+                # Redirect superusers to Django admin panel
+                print(f"DEBUG: User {user.username} logged in. is_superuser: {user.is_superuser}")
+                if user.is_superuser:
+                    print("DEBUG: Redirecting superuser to /admin/")
+                    return redirect('/admin/')
+                
+                print("DEBUG: Redirecting regular user to dashboard")
                 return redirect('dashboard')
     else:
         form = LoginForm()

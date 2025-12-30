@@ -31,10 +31,7 @@
                             <i class="fa-solid fa-play"></i>
                             <span>Read Story</span>
                         </a>
-                        <a href="{% url 'blogs' post.slug %}" class="hero-secondary-btn">
-                            <i class="fa-solid fa-circle-info"></i>
-                            <span>More Info</span>
-                        </a>
+
                     </div>
                 </div>
             </div>
@@ -43,18 +40,15 @@
     </div>
 
     <!-- Navigation Arrows -->
-    <button class="hero-control prev-slide" onclick="navigateSlide(-1)" aria-label="Previous">
-        <i class="fa-solid fa-angle-left"></i>
-    </button>
-    <button class="hero-control next-slide" onclick="navigateSlide(1)" aria-label="Next">
+
+    <button class="hero-control next-slide" aria-label="Next">
         <i class="fa-solid fa-angle-right"></i>
     </button>
 
     <!-- Thumbnail Navigation -->
     <div class="thumbnail-nav">
         {% for post in featured_posts %}
-        <button class="thumb-item {% if forloop.first %}active{% endif %}" onclick="jumpToSlide({{ forloop.counter0 }})"
-            data-index="{{ forloop.counter0 }}">
+        <button class="thumb-item {% if forloop.first %}active{% endif %}" data-index="{{ forloop.counter0 }}">
             {% if post.feature_image %}
             <img src="{{ post.feature_image.url }}" alt="{{ post.title }}">
             {% else %}
@@ -220,22 +214,22 @@
 
 <!-- Advanced Carousel JavaScript -->
 <script>
-    (function () {
+    document.addEventListener("DOMContentLoaded", function () {
         let currentSlide = 0;
         const slides = document.querySelectorAll('.hero-slide-item');
         const thumbs = document.querySelectorAll('.thumb-item');
         const progressBar = document.getElementById('slideProgress');
-        let autoTimer;
-        let progressTimer;
-        const SLIDE_DURATION = 6000;
+        const SLIDE_DURATION = 5000;
 
         if (slides.length === 0) return;
 
         function updateSlide(index) {
+            // Calculate valid index
             if (index >= slides.length) currentSlide = 0;
             else if (index < 0) currentSlide = slides.length - 1;
             else currentSlide = index;
 
+            // Update UI classes
             slides.forEach((s, i) => {
                 s.classList.remove('active');
                 if (thumbs[i]) thumbs[i].classList.remove('active');
@@ -244,60 +238,63 @@
             slides[currentSlide].classList.add('active');
             if (thumbs[currentSlide]) thumbs[currentSlide].classList.add('active');
 
-            resetProgress();
+            // Restart Progress Bar Animation
+            startProgress();
         }
 
-        window.navigateSlide = function (dir) {
-            updateSlide(currentSlide + dir);
-            resetAutoSlide();
-        };
+        function startProgress() {
+            if (!progressBar) return;
 
-        window.jumpToSlide = function (idx) {
-            updateSlide(idx);
-            resetAutoSlide();
-        };
+            // Reset Animation
+            progressBar.classList.remove('animating');
+            void progressBar.offsetWidth; // Trigger Reflow
 
-        function resetProgress() {
-            if (progressBar) {
-                progressBar.style.transition = 'none';
-                progressBar.style.width = '0%';
-                setTimeout(() => {
-                    progressBar.style.transition = `width ${SLIDE_DURATION}ms linear`;
-                    progressBar.style.width = '100%';
-                }, 50);
-            }
+            // Apply Duration and Start
+            progressBar.style.animationDuration = `${SLIDE_DURATION}ms`;
+            progressBar.classList.add('animating');
         }
 
-        function autoAdvance() {
-            updateSlide(currentSlide + 1);
+        // Auto-All via Animation End
+        if (progressBar) {
+            progressBar.addEventListener('animationend', () => {
+                updateSlide(currentSlide + 1);
+            });
         }
 
-        function resetAutoSlide() {
-            clearInterval(autoTimer);
-            autoTimer = setInterval(autoAdvance, SLIDE_DURATION);
+        // Initialize first run
+        startProgress();
+
+        // Event Listeners: Next Button
+        const nextBtn = document.querySelector('.next-slide');
+        if (nextBtn) {
+            nextBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                updateSlide(currentSlide + 1);
+            });
         }
 
-        // Initialize
-        resetProgress();
-        resetAutoSlide();
+        // Thumbnail Click Listeners
+        thumbs.forEach((thumb, index) => {
+            thumb.addEventListener('click', () => {
+                updateSlide(index);
+            });
+        });
 
-        // Pause on hover
+        // Pause on Hover (CSS Animation Pause)
         const hero = document.querySelector('.hero-showcase');
-        if (hero) {
+        if (hero && progressBar) {
             hero.addEventListener('mouseenter', () => {
-                clearInterval(autoTimer);
-                if (progressBar) progressBar.style.animationPlayState = 'paused';
+                progressBar.style.animationPlayState = 'paused';
             });
             hero.addEventListener('mouseleave', () => {
-                resetAutoSlide();
-                if (progressBar) progressBar.style.animationPlayState = 'running';
+                progressBar.style.animationPlayState = 'running';
             });
         }
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') navigateSlide(-1);
-            if (e.key === 'ArrowRight') navigateSlide(1);
+            if (e.key === 'ArrowLeft') updateSlide(currentSlide - 1);
+            if (e.key === 'ArrowRight') updateSlide(currentSlide + 1);
         });
 
         // Touch swipe support
@@ -310,12 +307,12 @@
             hero.addEventListener('touchend', (e) => {
                 const diff = touchStart - e.changedTouches[0].clientX;
                 if (Math.abs(diff) > 50) {
-                    if (diff > 0) navigateSlide(1);
-                    else navigateSlide(-1);
+                    if (diff > 0) updateSlide(currentSlide + 1); // Swipe left -> Next
+                    else updateSlide(currentSlide - 1); // Swipe right -> Prev
                 }
             }, { passive: true });
         }
-    })();
+    });
 </script>
 
 {% endblock %}

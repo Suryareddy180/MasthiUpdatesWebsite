@@ -12,7 +12,7 @@
 <div class="blog-detail-page">
     <div class="container">
 
-        <!-- Breadcrumb -->
+        <!-- ========== Breadcrumb Navigation ========== -->
         <nav class="breadcrumb-nav">
             <a href="{% url 'home' %}" class="breadcrumb-link">
                 <i class="fas fa-home"></i> Home
@@ -29,7 +29,7 @@
 
         <div class="row gx-5">
 
-            <!-- Main Article -->
+            <!-- ========== Main Article Column ========== -->
             <main class="col-lg-8">
                 <article class="blog-post-article">
 
@@ -40,10 +40,10 @@
                     </a>
                     {% endif %}
 
-                    <!-- Title -->
+                    <!-- Article Title -->
                     <h1 class="blog-title">{{ single_post.title }}</h1>
 
-                    <!-- Meta Bar -->
+                    <!-- Meta Information Bar -->
                     <div class="meta-bar">
                         <div class="meta-item">
                             <i class="far fa-calendar"></i>
@@ -52,10 +52,6 @@
                         <div class="meta-item">
                             <i class="fas fa-user"></i>
                             <span>{{ single_post.author }}</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="far fa-clock"></i>
-                            <span>{{ single_post.content|wordcount }} words</span>
                         </div>
                     </div>
 
@@ -67,19 +63,19 @@
                     </div>
                     {% endif %}
 
-                    <!-- Short Description (Lead) -->
+                    <!-- Short Description (Lead Text) -->
                     {% if single_post.short_description %}
                     <div class="lead-text">
                         <p>{{ single_post.short_description }}</p>
                     </div>
                     {% endif %}
 
-                    <!-- Main Content -->
+                    <!-- Main Article Content -->
                     <div class="article-content">
                         {{ single_post.content|safe }}
                     </div>
 
-                    <!-- Tags/Category -->
+                    <!-- Article Tags/Category Footer -->
                     <div class="article-tags">
                         {% if single_post.category %}
                         <span class="tag-label">Filed under:</span>
@@ -89,7 +85,7 @@
                         {% endif %}
                     </div>
 
-                    <!-- Share Section -->
+                    <!-- Social Share Section -->
                     <div class="share-section">
                         <h6 class="share-title">
                             <i class="fas fa-share-nodes"></i> Share this article
@@ -118,27 +114,112 @@
                         </div>
                     </div>
 
-                    <!-- Author Card -->
-                    <div class="author-card">
-                        <div class="author-avatar">
-                            <i class="fas fa-user"></i>
+                    <!-- ========== Comments Display (Visible to All) ========== -->
+                    <div class="comments-section">
+                        <h5 class="comments-title">
+                            <i class="fas fa-comments"></i>
+                            Comments ({{ comments.count }})
+                        </h5>
+
+                        {% if comments %}
+                        <div class="comments-list">
+                            {% for comment in comments %}
+                            <div class="comment-item">
+                                <div class="comment-header">
+                                    <div class="comment-user">
+                                        <div class="user-avatar">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <div class="user-info">
+                                            <span class="user-name">{{ comment.user.username }}</span>
+                                            <span class="comment-date">
+                                                <i class="far fa-clock"></i>
+                                                {{ comment.created_at|timesince }} ago
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="comment-body">
+                                    <p>{{ comment.comment }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
-                        <div class="author-info">
-                            <span class="author-label">Written by</span>
-                            <h5 class="author-name">{{ single_post.author }}</h5>
-                            <p class="author-bio">Cinema enthusiast sharing the latest updates from the world of movies.
-                            </p>
+                        {% else %}
+                        <div class="no-comments">
+                            <i class="far fa-comment-dots"></i>
+                            <p>No comments yet. Be the first to share your thoughts!</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- ========== Comment Form / Access Control ========== -->
+                    {% if request.user.is_authenticated %}
+                    {% if request.user.is_staff %}
+                    <!-- Contact Admin Message (for team members) -->
+                    <div class="contact-admin-section">
+                        <div class="contact-admin-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h5 class="contact-admin-title">Welcome, Team Member!</h5>
+                        <p class="contact-admin-text">
+                            You're logged in as a team member. To gain access to comment on posts and other features,
+                            please contact the administrator for permission assignment.
+                        </p>
+                        <div class="admin-contact-info">
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:suryareddynallimilli@gmail.com">suryareddynallimilli@gmail.com</a>
+                        </div>
+                        <a href="{% url 'home' %}" class="btn-back-home">
+                            <i class="fas fa-home"></i> Back to Home
+                        </a>
+                    </div>
+                    {% else %}
+                    <!-- Comment Form (for public users) -->
+                    <div class="comment-form-box">
+                        <form action="{% url 'blogs' single_post.slug %}" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <textarea name="comment" id="comment" class="form-control comment-textarea" rows="4"
+                                    placeholder="Write your comment here..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-warning comment-submit-btn mt-2">
+                                <i class="fas fa-paper-plane"></i> Submit Comment
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <!-- Login Prompt (for unauthenticated users) -->
+                    <div class="login-prompt-section">
+                        <div class="login-prompt-icon">
+                            <i class="fas fa-sign-in-alt"></i>
+                        </div>
+                        <h5 class="login-prompt-title">Want to Join the Discussion?</h5>
+                        <p class="login-prompt-text">
+                            Login to your account to post your own comments on this article.
+                        </p>
+                        <div class="login-prompt-buttons">
+                            <a href="{% url 'login' %}" class="btn-login-prompt">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                            <a href="{% url 'register' %}" class="btn-register-prompt">
+                                <i class="fas fa-user-plus"></i> Sign Up
+                            </a>
                         </div>
                     </div>
+                    {% endif %}
 
                 </article>
             </main>
 
-            <!-- Sidebar -->
+
+
+            <!-- ========== Sidebar Column ========== -->
             <aside class="col-lg-4 blog-sidebar">
                 <div class="sidebar-sticky">
 
-                    <!-- Quick Actions -->
+                    <!-- Quick Navigation Actions -->
                     <div class="sidebar-box quick-actions">
                         <a href="javascript:history.back()" class="action-btn">
                             <i class="fas fa-arrow-left"></i> Go Back
@@ -148,23 +229,8 @@
                         </a>
                     </div>
 
-                    <!-- Search Box -->
-                    <div class="sidebar-box">
-                        <h6 class="sidebar-title">
-                            <i class="fas fa-search"></i> Search
-                        </h6>
-                        <form action="{% url 'search' %}" method="get" class="sidebar-search">
-                            <div class="sidebar-search-wrapper">
-                                <input type="text" name="keyword" placeholder="Search articles..."
-                                    class="sidebar-search-input">
-                                <button type="submit" class="sidebar-search-btn">
-                                    <i class="fas fa-arrow-right"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
 
-                    <!-- Categories -->
+                    <!-- Categories Widget -->
                     {% if categories %}
                     <div class="sidebar-box">
                         <h6 class="sidebar-title">
@@ -183,7 +249,7 @@
                     </div>
                     {% endif %}
 
-                    <!-- About -->
+                    <!-- About Widget -->
                     {% if about %}
                     <div class="sidebar-box">
                         <h6 class="sidebar-title">
@@ -193,7 +259,7 @@
                     </div>
                     {% endif %}
 
-                    <!-- Social -->
+                    <!-- Social Connect Widget -->
                     <div class="sidebar-box">
                         <h6 class="sidebar-title">
                             <i class="fas fa-heart"></i> Connect
@@ -215,7 +281,7 @@
                         </div>
                     </div>
 
-                    <!-- Newsletter -->
+                    <!-- Newsletter/Follow CTA Widget -->
                     <div class="sidebar-box newsletter-box">
                         <div class="newsletter-icon">
                             <i class="fas fa-bell"></i>
@@ -235,6 +301,7 @@
     </div>
 </div>
 
+<!-- ========== JavaScript ========== -->
 <script>
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(function () {

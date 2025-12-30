@@ -27,8 +27,19 @@ def posts_by_category(request,category_id):
 
 def blogs(request,slug):
     single_post=get_object_or_404(Blog,slug=slug,status='Published')
+    if request.method =='POST':
+        comment=Comment()
+        comment.user=request.user
+        comment.blog=single_post
+        comment.comment=request.POST.get('comment')
+        comment.save()
+        return redirect('blogs',slug=single_post.slug)
+    #comments
+    comments=Comment.objects.filter(blog=single_post) 
+    
     context={
         'single_post':single_post,
+        'comments':comments,
     }
     return render(request,'blogs.html',context)
 
@@ -49,3 +60,33 @@ def search(request):
         'keyword': keyword,
     }
     return render(request, 'search.html', context)
+
+
+def edit_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    # Permission check: Author or Staff
+    if request.user != comment.user and not request.user.is_staff:
+        return redirect('blogs', slug=comment.blog.slug)
+
+    if request.method == 'POST':
+        new_comment_text = request.POST.get('comment')
+        if new_comment_text:
+            comment.comment = new_comment_text
+            comment.save()
+            return redirect('blogs', slug=comment.blog.slug)
+
+    context = {
+        'comment': comment
+    }
+    return render(request, 'edit_comment.html', context)
+
+
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    # Permission check: Author or Staff
+    if request.user == comment.user or request.user.is_staff:
+        blog_slug = comment.blog.slug
+        comment.delete()
+        return redirect('blogs', slug=blog_slug)
+    
+    return redirect('blogs', slug=comment.blog.slug)
