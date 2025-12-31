@@ -107,8 +107,9 @@ def edit_category(request, id):
     return render(request, 'dashboards/edit_category.html', context)
 @login_required(login_url='login')
 def delete_category(request, id):
-    category = Category.objects.get(id=id)
-    category.delete()
+    if request.method == 'POST':
+        category = get_object_or_404(Category, id=id)
+        category.delete()
     return redirect('categories')
 
 @login_required(login_url='login')
@@ -160,10 +161,11 @@ def edit_post(request, id):
     return render(request, 'dashboards/edit_post.html', context)
 
 @login_required(login_url='login')
-def delete_post(request,id):
-   post=get_object_or_404(Blog,id=id)
-   post.delete()
-   return redirect('posts')
+def delete_post(request, id):
+    if request.method == 'POST':
+        post = get_object_or_404(Blog, id=id)
+        post.delete()
+    return redirect('posts')
 
 @login_required(login_url='login')
 def users(request):
@@ -206,9 +208,10 @@ def edit_user(request, id):
 
 @login_required(login_url='login')
 def delete_user(request, id):
-    User = auth.get_user_model()
-    user = get_object_or_404(User, id=id)
-    user.delete()
+    if request.method == 'POST':
+        User = auth.get_user_model()
+        user = get_object_or_404(User, id=id)
+        user.delete()
     return redirect('users')
 
 @login_required(login_url='login')

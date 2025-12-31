@@ -78,3 +78,9 @@ steps of making of Mastie Updates :-
 64. Edit Comment
 65. Delete Comment
 66. Git Push
+67. Allow Only Authenticated Users to Comment , Edit and Delete their own comments
+68. Git Push
+
+Deployment Overview (PythonAnywhere)
+------------------
+1. 

@@ -54,22 +54,7 @@
                     </form>
 
                     <!-- Divider -->
-                    <div class="auth-divider">
-                        <span>or continue with</span>
-                    </div>
 
-                    <!-- Social Login Options -->
-                    <div class="social-login">
-                        <button type="button" class="social-btn google" title="Login with Google">
-                            <i class="fa-brands fa-google"></i>
-                        </button>
-                        <button type="button" class="social-btn facebook" title="Login with Facebook">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </button>
-                        <button type="button" class="social-btn twitter" title="Login with Twitter">
-                            <i class="fa-brands fa-x-twitter"></i>
-                        </button>
-                    </div>
 
                     <!-- Footer -->
                     <div class="auth-footer">
@@ -242,6 +227,26 @@
         border-left-color: #ff6b6b;
         color: #ff6b6b;
     }
+
+    /* Password Toggle Styles */
+    .password-wrapper {
+        position: relative;
+    }
+
+    .password-toggle-icon {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #6c757d;
+        z-index: 10;
+        transition: color 0.3s ease;
+    }
+
+    .password-toggle-icon:hover {
+        color: var(--primary-gold, #ffc107);
+    }
 </style>
 
 <script>
@@ -265,6 +270,36 @@
         input.addEventListener('blur', function () {
             if (!this.value) {
                 this.parentElement.classList.remove('focused');
+            }
+        });
+    });
+
+    // Show Password Toggle
+    const passwordInputs = document.querySelectorAll('input[type="password"]');
+    passwordInputs.forEach(input => {
+        // Create wrapper
+        const wrapper = document.createElement('div');
+        wrapper.className = 'password-wrapper';
+        input.parentNode.insertBefore(wrapper, input);
+        wrapper.appendChild(input);
+
+        // Create toggle icon
+        const icon = document.createElement('i');
+        icon.className = 'fa-solid fa-eye password-toggle-icon';
+        icon.title = "Show Password";
+        wrapper.appendChild(icon);
+
+        // Toggle event
+        icon.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent focus loss issues if any
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
             }
         });
     });

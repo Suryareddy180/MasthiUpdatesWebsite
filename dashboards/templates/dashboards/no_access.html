@@ -9,31 +9,35 @@
                 <div class="no-access-card animated-entrance">
                     <!-- Icon -->
                     <div class="no-access-icon">
-                        <i class="fa-solid fa-shield-halved"></i>
+                        <i class="fa-solid fa-comments"></i>
                     </div>
 
                     <!-- Header -->
-                    <h2>Dashboard Access Restricted</h2>
+                    <h2>Welcome! 🎉</h2>
                     <p class="no-access-message">
-                        You don't have permission to access the dashboard.
+                        Exciting news! You're now allowed to post comments on our articles and engage with our amazing
+                        community! 🚀
                     </p>
-
-                    <!-- Contact Admin Section -->
-                    <div class="contact-admin-box">
-                        <i class="fa-solid fa-envelope"></i>
-                        <h5>Need Access?</h5>
-                        <p>Please contact the administrator to request dashboard permissions.</p>
-                        <a href="mailto:{{ admin_email }}" class="admin-email">
-                            <i class="fa-solid fa-at"></i>
-                            {{ admin_email }}
-                        </a>
-                    </div>
 
                     <!-- Action Button -->
                     <a href="{% url 'home' %}" class="visit-site-btn">
                         <i class="fa-solid fa-globe"></i>
                         Visit Website
                     </a>
+
+                    <!-- Join Our Team Section -->
+                    <div class="join-team-box">
+                        <i class="fa-solid fa-users"></i>
+                        <h5>Interested in Joining Our Team? 🌟</h5>
+                        <p>We're always looking for talented individuals! If you're interested in joining our team,
+                            you're absolutely welcome! We'd love to hear from you! 💼</p>
+                        <p class="portfolio-text">Share your amazing portfolio with us:</p>
+                        <a href="mailto:{{ admin_email }}?subject=Portfolio Submission - Interested in Joining Team"
+                            class="portfolio-email">
+                            <i class="fa-solid fa-briefcase"></i>
+                            Share Your Portfolio
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -160,6 +164,67 @@
         box-shadow: 0 8px 20px rgba(255, 193, 7, 0.2);
         color: #ffc107;
         text-decoration: none;
+    }
+
+    .join-team-box {
+        background: linear-gradient(135deg, rgba(76, 175, 80, 0.08), rgba(46, 125, 50, 0.05));
+        border-left: 4px solid #4caf50;
+        border-radius: 12px;
+        padding: 25px;
+        margin: 30px 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    .join-team-box i {
+        font-size: 2rem;
+        color: #4caf50;
+        margin-bottom: 10px;
+    }
+
+    .join-team-box h5 {
+        color: #4caf50;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .join-team-box p {
+        color: #ccc;
+        margin-bottom: 10px;
+        font-size: 0.95rem;
+    }
+
+    .portfolio-text {
+        color: #aaa;
+        font-weight: 600;
+        margin-top: 15px;
+        margin-bottom: 10px;
+    }
+
+    .portfolio-email {
+        display: inline-block;
+        background: rgba(76, 175, 80, 0.15);
+        color: #4caf50;
+        padding: 12px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        margin-top: 10px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(76, 175, 80, 0.3);
+    }
+
+    .portfolio-email:hover {
+        background: rgba(76, 175, 80, 0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(76, 175, 80, 0.2);
+        color: #4caf50;
+        text-decoration: none;
+    }
+
+    .portfolio-email i {
+        margin-right: 8px;
     }
 
     .visit-site-btn {

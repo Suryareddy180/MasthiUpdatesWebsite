@@ -23,21 +23,10 @@
                         {% csrf_token %}
                         {{ form | crispy }}
 
-                        <div class="terms-check">
-                            <label>
-                                <input type="checkbox" name="terms" required>
-                                I agree to the <a href="{% url 'terms' %}" target="_blank" class="auth-link">Terms &
-                                    Conditions</a>
-                            </label>
-                        </div>
-
                         <button type="submit" class="auth-submit-btn">
                             <i class="fa-solid fa-rocket"></i> Create Account
                         </button>
                     </form>
-
-
-
                     <!-- Footer -->
                     <div class="auth-footer">
                         <p>Already have an account?
@@ -54,17 +43,43 @@
     document.addEventListener("DOMContentLoaded", function () {
         // Unique prefix for this form's storage keys
         const STORAGE_PREFIX = 'register_form_';
+        const TIMESTAMP_KEY = 'register_form_timestamp';
+        const EXPIRATION_TIME = 30 * 60 * 1000; // 30 minutes in milliseconds
         const form = document.querySelector('.auth-form');
 
         if (!form) return;
 
         const inputs = form.querySelectorAll('input:not([type="password"]):not([type="hidden"]), select, textarea');
 
-        // Restore data
+        // Check if stored data has expired
+        function isDataExpired() {
+            const timestamp = localStorage.getItem(TIMESTAMP_KEY);
+            if (!timestamp) return true;
+
+            const now = Date.now();
+            const savedTime = parseInt(timestamp, 10);
+            return (now - savedTime) > EXPIRATION_TIME;
+        }
+
+        // Clear all form data from localStorage
+        function clearFormData() {
+            inputs.forEach(input => {
+                if (input.name === 'csrfmiddlewaretoken') return;
+                localStorage.removeItem(STORAGE_PREFIX + input.name);
+            });
+            localStorage.removeItem(TIMESTAMP_KEY);
+        }
+
+        // Check for expired data and clear if necessary
+        if (isDataExpired()) {
+            clearFormData();
+        }
+
+        // Restore data from localStorage
         inputs.forEach(input => {
             if (input.name === 'csrfmiddlewaretoken') return;
 
-            const savedValue = sessionStorage.getItem(STORAGE_PREFIX + input.name);
+            const savedValue = localStorage.getItem(STORAGE_PREFIX + input.name);
             if (savedValue !== null) {
                 if (input.type === 'checkbox' || input.type === 'radio') {
                     input.checked = (savedValue === 'true');
@@ -73,20 +88,118 @@
                 }
             }
 
-            // Save data on change
+            // Save data on change and update timestamp
             input.addEventListener('input', function () {
                 if (input.type === 'checkbox' || input.type === 'radio') {
-                    sessionStorage.setItem(STORAGE_PREFIX + input.name, input.checked);
+                    localStorage.setItem(STORAGE_PREFIX + input.name, input.checked);
                 } else {
-                    sessionStorage.setItem(STORAGE_PREFIX + input.name, input.value);
+                    localStorage.setItem(STORAGE_PREFIX + input.name, input.value);
                 }
+                // Update timestamp on every input
+                localStorage.setItem(TIMESTAMP_KEY, Date.now().toString());
             });
         });
 
-        // Clear data on submit "until user click the register button"
+        // Clear data on successful form submission
         form.addEventListener('submit', function () {
-            inputs.forEach(input => {
-                sessionStorage.removeItem(STORAGE_PREFIX + input.name);
+            clearFormData();
+        });
+    });
+</script>
+
+<style>
+    /* Password Toggle Styles */
+    .password-wrapper {
+        position: relative;
+    }
+
+    .password-toggle-icon {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #6c757d;
+        z-index: 10;
+        transition: color 0.3s ease;
+    }
+
+    .password-toggle-icon:hover {
+        color: var(--primary-gold, #ffc107);
+    }
+
+    /* Terms Checkbox Styles */
+    #div_id_terms_accepted {
+        margin-top: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    #div_id_terms_accepted label {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+
+    #div_id_terms_accepted input[type="checkbox"] {
+        margin-top: 0.25rem;
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+    }
+
+    #div_id_terms_accepted .auth-link {
+        color: var(--primary-gold, #ffc107);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    #div_id_terms_accepted .auth-link:hover {
+        color: var(--primary-gold-hover, #ffb300);
+        text-decoration: underline;
+    }
+
+    /* Error styling for terms checkbox */
+    #div_id_terms_accepted .invalid-feedback {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        display: block;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Show Password Toggle Logic
+        const passwordInputs = document.querySelectorAll('input[type="password"]');
+        passwordInputs.forEach(input => {
+            // Create wrapper
+            const wrapper = document.createElement('div');
+            wrapper.className = 'password-wrapper';
+            input.parentNode.insertBefore(wrapper, input);
+            wrapper.appendChild(input);
+
+            // Create toggle icon
+            const icon = document.createElement('i');
+            icon.className = 'fa-solid fa-eye password-toggle-icon';
+            icon.title = "Show Password";
+            wrapper.appendChild(icon);
+
+            // Toggle event
+            icon.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent focus loss
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
             });
         });
     });

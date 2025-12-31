@@ -49,6 +49,11 @@ INSTALLED_APPS = [
     'django_recaptcha',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'blog_main.backends.EmailBackend',
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -149,14 +154,14 @@ SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']
 
 # Email Configuration for Password Reset
 # Console backend for development (prints emails to console)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # For production, use SMTP:
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'suryareddynallimilli@gmail.com'
-EMAIL_HOST_PASSWORD = '@Surya007'
+EMAIL_HOST_PASSWORD = 'vgln wwpr oxjk clcy'
 DEFAULT_FROM_EMAIL = 'Masthi Updates <noreply@masthiupdates.com>'
 
 # Login/Logout Redirect URLs

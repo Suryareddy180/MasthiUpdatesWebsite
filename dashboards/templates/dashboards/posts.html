@@ -19,7 +19,7 @@
         <thead>
             <tr>
                 <th style="width: 40px;">#</th>
-                <th style="width: 250px;"><i class="fa-solid fa-heading"></i> Title</th>
+                <th style="width: 400px;"><i class="fa-solid fa-heading"></i> Title</th>
                 <th><i class="fa-solid fa-folder"></i> Category</th>
                 <th><i class="fa-solid fa-user"></i> Author</th>
                 <th><i class="fa-regular fa-calendar"></i> Date</th>
@@ -65,10 +65,13 @@
                     <a href="{% url 'edit_post' post.id %}" class="action-btn edit" title="Edit">
                         <i class="fa-solid fa-edit"></i>
                     </a>
-                    <a href="{% url 'delete_post' post.id %}" class="action-btn delete" title="Delete"
-                        onclick="return confirm('Are you sure you want to delete this post?');">
-                        <i class="fa-solid fa-trash"></i>
-                    </a>
+                    <form method="post" action="{% url 'delete_post' post.id %}" style="display: inline;"
+                        onsubmit="return confirm('Are you sure you want to delete this post?');">
+                        {% csrf_token %}
+                        <button type="submit" class="action-btn delete" title="Delete">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </form>
                 </td>
             </tr>
             {% empty %}
