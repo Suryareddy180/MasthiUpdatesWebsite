@@ -27,9 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-rbaehy#t=_om9(sh%5w+#l!ht5-)n(79=w^u8n=jy75@j3w941'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# Set to False when deploying to production
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Add your PythonAnywhere domain when deploying
+# Example: ALLOWED_HOSTS = ['masthiupdates.pythonanywhere.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['masthiupdates.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -56,6 +59,7 @@ AUTHENTICATION_BACKENDS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # For static files in production
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
