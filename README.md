@@ -638,18 +638,12 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 👨‍💻 Author
 
-<div align="center">
+### **Surya Prakash Reddy Nallimilli**
 
-<img src="https://via.placeholder.com/150/1f2029/FFC107?text=SR" alt="Author" style="border-radius: 50%;" />
-
-### **Surya Reddy Nallimilli**
-
-*Full-Stack Developer | Django Enthusiast | UI/UX Lover*
+* Python Developer | Django Enthusiast *
 
 [![Email](https://img.shields.io/badge/Email-suryareddynallimilli%40gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:suryareddynallimilli@gmail.com)
 [![GitHub](https://img.shields.io/badge/GitHub-Suryareddy180-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Suryareddy180)
-
-</div>
 
 ---
 
