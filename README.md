@@ -692,12 +692,6 @@ Special thanks to:
 <br /><br />
 <i>For bug reports</i>
 </td>
-<td align="center" width="33%">
-<h3>💬 Discussions</h3>
-<a href="https://github.com/Suryareddy180/MasthiUpdatesWebsite/discussions">GitHub Discussions</a>
-<br /><br />
-<i>For questions & ideas</i>
-</td>
 </tr>
 </table>
 
