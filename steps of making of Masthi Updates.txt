@@ -88,3 +88,26 @@ Checklist:-
 1. Create an updated requirements.txt file
 2. Remove db.sqlite3 from gitignore
 3. Remove media from gitignore
+
+Steps to Deploy:-
+----------------
+1. open pythonanywhere.com
+2. open your account
+3. click on the console
+4. click on the bash console
+5. git clone  https://github.com/Suryareddy180/MasthiUpdatesWebsite.git  
+6. ls => to see the files
+7. cd MasthiUpdatesWebsite => to enter the directory
+8.mkvirtualenv --python=/usr/bin/python3.10 mysite-virtualenv => to create a virtual environment
+9. workon mysite-virtualenv => to activate the virtual environment
+10. pip install -r requirements.txt => to install the requirements
+11. on console click on the web tab on new tab by clicking  3 lines on the console
+12. click add new web app
+13. select the python version 
+14 click on the next button
+15. wait until we see """All done! Your web app is now set up. Details below."""
+16. look at the details below and observe Code section
+17.  we need to specify the source code path in that
+18. now specify virtual environment path
+19. Static files should be specified
+20. come to bash console and run python manage.py collectstatic
