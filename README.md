@@ -1,5 +1,7 @@
 <div align="center">
 
+![Masthi Updates Banner](file:///C:/Users/Windows%2011/.gemini/antigravity/brain/12dfdc62-aad1-4f97-9fb6-a1c1b0bb02e7/readme_banner_1767176216576.png)
+
 # 🎬 Masthi Updates
 ### *Your Ultimate Entertainment News Hub* ✨
 
@@ -90,60 +92,39 @@ Whether you're a **movie blogger**, **entertainment journalist**, or **content c
 
 <div align="center">
 
-### 🌓 **Dark Mode & Light Mode**
-*Seamlessly switch between themes - your preference is saved!*
+### 🏠 **Homepage - Netflix-Style Experience**
+*Stunning cinematic slideshow with featured posts!*
+
+![Homepage Hero](screenshots/home.png)
+
+---
+
+### 📰 **Content Showcase**
+*Browse articles with beautiful card layouts*
 
 <table>
 <tr>
-<td align="center" width="50%">
-<img src="https://via.placeholder.com/600x400/1f2029/FFC107?text=🌙+Dark+Mode+Preview" alt="Dark Mode" />
-<br />
-<b>🌙 Dark Mode</b>
-<br />
-<i>Perfect for night reading</i>
+<td width="50%">
+
+![Homepage Content](screenshots/home2.png)
+**Featured Articles Grid**
+
 </td>
-<td align="center" width="50%">
-<img src="https://via.placeholder.com/600x400/ffffff/333333?text=☀️+Light+Mode+Preview" alt="Light Mode" />
-<br />
-<b>☀️ Light Mode</b>
-<br />
-<i>Clean & professional</i>
+<td width="50%">
+
+![Homepage Footer](screenshots/home3.png)
+**Trending & Categories**
+
 </td>
 </tr>
 </table>
 
-### 🎬 **Netflix-Style Cinematic Slideshow**
-*Featured posts that slide like movie trailers!*
-
-<img src="https://via.placeholder.com/800x400/0a0a0a/FFC107?text=🎬+Cinematic+Slideshow+with+Auto-Play" alt="Slideshow" />
-
-### 📱 **Fully Responsive Design**
-*Looks stunning on every device!*
-
-<table>
-<tr>
-<td align="center" width="33%">
-<img src="https://via.placeholder.com/200x400/1f2029/FFC107?text=📱+Mobile" alt="Mobile" />
-<br />
-<b>📱 Mobile</b>
-</td>
-<td align="center" width="33%">
-<img src="https://via.placeholder.com/300x400/1f2029/FFC107?text=📱+Tablet" alt="Tablet" />
-<br />
-<b>📱 Tablet</b>
-</td>
-<td align="center" width="33%">
-<img src="https://via.placeholder.com/400x300/1f2029/FFC107?text=💻+Desktop" alt="Desktop" />
-<br />
-<b>💻 Desktop</b>
-</td>
-</tr>
-</table>
+---
 
 ### 📊 **Modern Admin Dashboard**
-*Manage your content with ease!*
+*Powerful content management interface*
 
-<img src="https://via.placeholder.com/800x500/1f2029/FFC107?text=📊+Admin+Dashboard+-+Posts+|+Categories+|+Users" alt="Dashboard" />
+![Admin Dashboard](screenshots/dashboard.png)
 
 </div>
 
@@ -749,7 +730,7 @@ Special thanks to:
 
 <br />
 
-**Made with ❤️ by Surya Reddy Nallimilli**
+**Made with ❤️ by Surya Prakash Reddy Nallimilli**
 
 *© 2025 Masthi Updates. All rights reserved.*
 
