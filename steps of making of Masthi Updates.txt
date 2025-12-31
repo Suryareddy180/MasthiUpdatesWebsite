@@ -83,4 +83,8 @@ steps of making of Mastie Updates :-
 
 Deployment Overview (PythonAnywhere)
 ------------------
-1. 
+Checklist:-
+-----------
+1. Create an updated requirements.txt file
+2. Remove db.sqlite3 from gitignore
+3. Remove media from gitignore
