@@ -32,7 +32,7 @@ DEBUG = True
 
 # Add your PythonAnywhere domain when deploying
 # Example: ALLOWED_HOSTS = ['masthiupdates.pythonanywhere.com', 'localhost', '127.0.0.1']
-ALLOWED_HOSTS = ['masthiupdates.pythonanywhere.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['masthiupdates1.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -126,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
