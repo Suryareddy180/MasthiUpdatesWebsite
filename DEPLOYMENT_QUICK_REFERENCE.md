@@ -1,73 +1,67 @@
-# Quick Deployment Commands for PythonAnywhere
+# Quick Deployment Reference
 
-## Initial Setup (Run Once)
+## Standard 3-Step Deployment Process
+
+### 1️⃣ Local: Commit & Push
 ```bash
-# 1. Clone repository
-git clone https://github.com/Suryareddy180/MasthiUpdatesWebsite.git
-cd MasthiUpdatesWebsite
-
-# 2. Create virtual environment
-mkvirtualenv --python=/usr/bin/python3.10 mysite-virtualenv
-
-# 3. Install dependencies
-pip install -r requirements.txt
-
-# 4. Collect static files
-python manage.py collectstatic --noinput
-
-# 5. Run migrations
-python manage.py migrate
-
-# 6. Create superuser
-python manage.py createsuperuser
+git add .
+git commit -m "Your change description"
+git push origin main
 ```
 
-## Update Deployed App (When you make changes)
+### 2️⃣ PythonAnywhere: Pull Changes
 ```bash
 cd ~/MasthiUpdatesWebsite
 git pull origin main
-workon mysite-virtualenv
-pip install -r requirements.txt
+```
+
+**If static files changed (CSS/JS/images):**
+```bash
+python manage.py collectstatic --noinput
+```
+
+**If models changed:**
+```bash
+python manage.py makemigrations
 python manage.py migrate
-python manage.py collectstatic --noinput
-# Then reload web app from Web tab
 ```
 
-## Important Paths for PythonAnywhere Web Configuration
-
-**Source code:** `/home/YOUR_USERNAME/MasthiUpdatesWebsite`
-
-**Working directory:** `/home/YOUR_USERNAME/MasthiUpdatesWebsite`
-
-**Virtualenv:** `/home/YOUR_USERNAME/.virtualenvs/mysite-virtualenv`
-
-**Static files:**
-- URL: `/static/` → Directory: `/home/YOUR_USERNAME/MasthiUpdatesWebsite/staticfiles`
-- URL: `/media/` → Directory: `/home/YOUR_USERNAME/MasthiUpdatesWebsite/media`
-
-## Settings to Update in settings.py (On PythonAnywhere)
-
-```python
-DEBUG = False
-ALLOWED_HOSTS = ['YOUR_USERNAME.pythonanywhere.com']
-```
-
-## Troubleshooting Quick Fixes
-
-**Static files not loading:**
-```bash
-python manage.py collectstatic --noinput
-```
-
-**500 Error:**
-- Check error log on Web tab
-- Verify ALLOWED_HOSTS includes your domain
-- Check if migrations are run
-
-**Module not found:**
-```bash
-pip install -r requirements.txt
-```
+### 3️⃣ PythonAnywhere: Reload Web App
+- Go to **Web** tab
+- Click green **Reload** button
 
 ---
-Remember to replace YOUR_USERNAME with your actual PythonAnywhere username!
+
+## Access PythonAnywhere
+- **URL:** https://www.pythonanywhere.com
+- **Console:** Consoles tab → Bash console
+- **Project Path:** `~/MasthiUpdatesWebsite`
+
+---
+
+## Common Commands
+
+| Change Type | Extra Command Needed |
+|------------|---------------------|
+| Templates (.html) | None - just reload |
+| Python code (.py) | None - just reload |
+| Static files (CSS/JS) | `collectstatic --noinput` |
+| Models (models.py) | `makemigrations` + `migrate` |
+| Settings (settings.py) | None - just reload |
+
+---
+
+## Troubleshooting
+
+**Changes not showing?**
+- Clear browser cache (Ctrl+F5)
+- Check error log: Web tab → Error log
+
+**Static files not updating?**
+- Run `collectstatic --noinput`
+
+---
+
+## Full Guide
+For detailed instructions, see: `.agent/workflows/deploy-to-production.md`
+Or use the command: `/deploy-to-production`
