@@ -1,5 +1,5 @@
 # Purpose: A Dockerfile is a step-by-step instruction file that tells Docker how to build and run our application.
-FROM python:3.10-slim
+FROM python:3.12-slim
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
