@@ -273,6 +273,123 @@
             background: #1a1b23;
             color: #fff;
         }
+
+        /* Dynamic Creative Layout Fixes for Mobile Viewports */
+        @media (max-width: 575px) {
+            .header-row {
+                flex-wrap: nowrap !important;
+                justify-content: space-between !important;
+            }
+            .header-logo {
+                gap: 6px !important;
+            }
+            .logo-img {
+                width: 38px !important;
+                height: 38px !important;
+            }
+            .brand-name {
+                font-size: 1.05rem !important;
+                white-space: nowrap !important;
+                letter-spacing: 0px !important;
+            }
+            .header-actions {
+                gap: 4px !important;
+                margin-right: 0 !important;
+            }
+            .auth-btn {
+                padding: 6px 10px !important;
+                font-size: 0.75rem !important;
+                margin-left: 2px !important;
+            }
+            .action-btn {
+                width: 34px !important;
+                height: 34px !important;
+                font-size: 0.85rem !important;
+            }
+            .mobile-app-action-btn {
+                padding: 4px 8px !important;
+                font-size: 0.7rem !important;
+            }
+            /* Add space at bottom of screen so mobile content isn't overlapped by bottom nav */
+            body {
+                padding-bottom: 80px !important;
+            }
+        }
+
+        /* Glassmorphism Bottom Navigation Bar exclusively for Mobile Users */
+        .mobile-bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(18, 19, 26, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 193, 7, 0.2);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+            z-index: 99998;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 65px;
+            padding: 0 10px;
+            transition: all 0.3s ease;
+        }
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-weight: 600;
+            gap: 4px;
+            flex: 1;
+            height: 100%;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+        .bottom-nav-item i {
+            font-size: 1.25rem;
+            transition: transform 0.2s;
+        }
+        .bottom-nav-item:hover,
+        .bottom-nav-item.active {
+            color: var(--primary-gold);
+            text-decoration: none;
+        }
+        .bottom-nav-item:hover i,
+        .bottom-nav-item.active i {
+            transform: translateY(-2px) scale(1.15);
+        }
+        /* Active dot indicator */
+        .bottom-nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 6px;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--primary-gold);
+            box-shadow: 0 0 8px var(--primary-gold);
+        }
+        .bottom-nav-item.action-badge {
+            color: #ff5722;
+        }
+        .bottom-nav-item.action-badge:hover {
+            color: #ff5722;
+        }
+        .bottom-nav-item.action-badge i {
+            animation: heartPulse 2s infinite;
+        }
+        
+        /* Hide mobile bottom nav on larger screens */
+        @media (min-width: 769px) {
+            .mobile-bottom-nav {
+                display: none !important;
+            }
+        }
     </style>
 
     {% block extra_css %}{% endblock %}
@@ -287,7 +404,7 @@
             <div class="row align-items-center header-row">
 
                 <!-- Logo & Brand -->
-                <div class="col-5 col-sm-4 col-md-3">
+                <div class="col-auto">
                     <a href="{% url 'home' %}" class="header-logo">
                         <img src="{% static 'images/logo.png' %}" class="logo-img" alt="Logo">
                         <div class="brand-info">
@@ -312,7 +429,7 @@
                 </div>
 
                 <!-- Actions -->
-                <div class="col-7 col-sm-8 col-md-4 d-flex justify-content-end align-items-center">
+                <div class="col flex-grow-1 d-flex justify-content-end align-items-center">
                     <div class="header-actions">
 
 
@@ -565,6 +682,26 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Other Scripts -->
+    <!-- ================= MOBILE EXCLUSIVE BOTTOM NAVIGATION BAR ================= -->
+    <nav class="mobile-bottom-nav">
+        <a href="{% url 'home' %}" class="bottom-nav-item {% if request.path == '/' %}active{% endif %}">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" id="bottomNavSearchBtn" class="bottom-nav-item">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Search</span>
+        </a>
+        <a href="#siteFooter" id="bottomNavCatBtn" class="bottom-nav-item">
+            <i class="fa-solid fa-clapperboard"></i>
+            <span>Explore</span>
+        </a>
+        <a href="#" id="bottomNavNotifyBtn" class="bottom-nav-item action-badge">
+            <i class="fa-solid fa-bell"></i>
+            <span>Alerts</span>
+        </a>
+    </nav>
+
     <!-- ================= CUSTOM MOBILE INSTALL & NOTIFICATION OVERLAY ================= -->
     <div id="mobileInstallOverlay" class="mobile-install-overlay">
         <div class="mobile-install-modal">
@@ -799,6 +936,46 @@
             pollLatestPostUI();
             setInterval(pollLatestPostUI, 45000);
         }, 3000);
+
+        // Bottom Nav Listeners
+        const bottomNavSearchBtn = document.getElementById('bottomNavSearchBtn');
+        const bottomNavNotifyBtn = document.getElementById('bottomNavNotifyBtn');
+        const bottomNavCatBtn = document.getElementById('bottomNavCatBtn');
+        const mobileSearchToggleBtn = document.getElementById('mobileSearchToggle');
+
+        if (bottomNavSearchBtn) {
+            bottomNavSearchBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Trigger mobile search toggle
+                if (mobileSearchToggleBtn) {
+                    mobileSearchToggleBtn.click();
+                } else {
+                    const searchRow = document.getElementById('mobileSearchRow');
+                    if (searchRow) {
+                        searchRow.style.display = searchRow.style.display === 'none' ? 'flex' : 'none';
+                        const inp = searchRow.querySelector('.search-input');
+                        if (inp) inp.focus();
+                    }
+                }
+                // Scroll to top to see search bar clearly
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        if (bottomNavNotifyBtn) {
+            bottomNavNotifyBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                showInstallPrompt();
+            });
+        }
+
+        if (bottomNavCatBtn) {
+            bottomNavCatBtn.addEventListener('click', () => {
+                // Remove active from others, highlight this
+                document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
+                bottomNavCatBtn.classList.add('active');
+            });
+        }
     </script>
 
 </body>
