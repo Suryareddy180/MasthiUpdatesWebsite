@@ -35,9 +35,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./certbot/www:/var/www/certbot
-      - ./certbot/conf:/etc/letsencrypt
+      - ./nginx:/etc/nginx/conf.d:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /opt/masthi_updates/certbot/www:/var/www/certbot:ro
       - ./staticfiles:/app/staticfiles
       - ./media:/app/media
     depends_on:
