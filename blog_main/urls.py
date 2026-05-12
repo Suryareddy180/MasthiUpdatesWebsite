@@ -46,6 +46,10 @@ urlpatterns = [
     path('password-reset/confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('password-reset/complete/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     
+    path('sw.js', views.sw_js, name='sw_js'),
+    path('save-subscription/', views.save_subscription, name='save_subscription'),
+    path('latest-post/', views.latest_post_api, name='latest_post_api'),
     path('dashboard/',include('dashboards.urls')),
 
 ]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+

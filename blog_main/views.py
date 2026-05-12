@@ -1,7 +1,11 @@
-from django.http import HttpResponse
-from django.shortcuts import render,redirect
+import json
+import os
+from django.conf import settings
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 
-from blogs.models import Category, Blog
+from blogs.models import Category, Blog, PushSubscription
 from assignments.models import About
 from .forms import RegistrationForm, LoginForm
 from django.contrib.auth.forms import AuthenticationForm
@@ -83,5 +87,52 @@ def terms(request):
 def logout(request):
     auth.logout(request)
     return redirect('home')
-    
 
+
+@csrf_exempt
+def save_subscription(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            endpoint = data.get('endpoint')
+            keys = data.get('keys', {})
+            p256dh = keys.get('p256dh')
+            auth_key = keys.get('auth')
+
+            if endpoint:
+                sub, created = PushSubscription.objects.update_or_create(
+                    endpoint=endpoint,
+                    defaults={
+                        'user': request.user if request.user.is_authenticated else None,
+                        'p256dh': p256dh,
+                        'auth': auth_key,
+                    }
+                )
+                return JsonResponse({'success': True, 'created': created})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+    return JsonResponse({'success': False}, status=405)
+
+
+def latest_post_api(request):
+    latest = Blog.objects.filter(status='Published').order_by('-created_at', '-updated_at').first()
+    if latest:
+        return JsonResponse({
+            'success': True,
+            'id': latest.id,
+            'title': latest.title,
+            'slug': latest.slug,
+            'short_description': latest.short_description,
+            'feature_image': latest.feature_image.url if latest.feature_image else '',
+        })
+    return JsonResponse({'success': False})
+
+
+def sw_js(request):
+    sw_path = os.path.join(settings.BASE_DIR, 'static', 'sw.js')
+    try:
+        with open(sw_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        return HttpResponse(content, content_type='application/javascript')
+    except FileNotFoundError:
+        return HttpResponse("// Service Worker not found", content_type='application/javascript', status=404)

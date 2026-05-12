@@ -11,3 +11,4 @@ class CategoryAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Blog,BlogAdmin)
 admin.site.register(Comment)
+admin.site.register(PushSubscription)

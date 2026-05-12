@@ -28,6 +28,252 @@
     <link href="{% static 'css/advanced-ui.css' %}" rel="stylesheet">
     <link href="{% static 'css/advanced-ui.css' %}" rel="stylesheet">
     <link href="{% static 'css/professional-header-footer.css' %}" rel="stylesheet">
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <style>
+        /* Custom Mobile Install & Notification Prompt UI */
+        .mobile-install-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s ease;
+        }
+        .mobile-install-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .mobile-install-modal {
+            background: #1a1b23;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 380px;
+            padding: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            color: #fff;
+            transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+        .mobile-install-overlay.active .mobile-install-modal {
+            transform: translateY(0);
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .modal-close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        .install-tag {
+            color: #ff5722;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .install-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: #fff;
+            line-height: 1.2;
+        }
+        .install-hero-block {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .install-icon-box {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: #ff5722;
+            flex-shrink: 0;
+            box-shadow: inset 0 0 20px rgba(255, 87, 34, 0.05);
+        }
+        .install-desc {
+            font-size: 0.9rem;
+            color: #bbb;
+            line-height: 1.5;
+            margin: 0;
+        }
+        .install-desc strong {
+            color: #fff;
+        }
+        .notification-toggle-box {
+            background: rgba(255, 193, 7, 0.08);
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .notification-toggle-box input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary-gold);
+            cursor: pointer;
+        }
+        .notification-label {
+            font-size: 0.85rem;
+            color: #e0e0e0;
+            margin: 0;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .notification-label span {
+            color: var(--primary-gold);
+            font-weight: 700;
+        }
+        .install-primary-btn {
+            background: linear-gradient(135deg, #ff5722 0%, #f44336 100%);
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            width: 100%;
+            padding: 14px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(244, 67, 54, 0.3);
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+        .install-primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(244, 67, 54, 0.4);
+            color: #fff;
+        }
+        .install-actions-row {
+            display: flex;
+            gap: 12px;
+        }
+        .btn-later {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bbb;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-later:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        .btn-install-secondary {
+            flex: 1;
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-install-secondary:hover {
+            background: #eee;
+        }
+        .install-footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 16px;
+        }
+        
+        /* Persistent Banner / Action icon for Mobile users */
+        .mobile-app-action-btn {
+            background: linear-gradient(135deg, var(--primary-gold), #ff9800);
+            color: #000;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 10px rgba(255, 193, 7, 0.3);
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .mobile-app-action-btn:hover {
+            color: #000;
+            transform: scale(1.05);
+        }
+        
+        /* Floating mini notification banner if new post detected */
+        .app-live-alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: rgba(255, 255, 255, 0.95);
+            color: #000;
+            padding: 12px 20px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 2px solid var(--primary-gold);
+        }
+        .app-live-alert.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        .dark-mode .app-live-alert {
+            background: #1a1b23;
+            color: #fff;
+        }
+    </style>
 
     {% block extra_css %}{% endblock %}
 </head>
@@ -70,6 +316,12 @@
                     <div class="header-actions">
 
 
+
+                        <!-- Install / Notifications Trigger -->
+                        <button id="installTriggerBtn" class="mobile-app-action-btn mr-2" title="Install App & Notify">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                            <span class="d-none d-sm-inline">App</span>
+                        </button>
 
                         <!-- Theme Toggle -->
                         <button id="themeToggle" class="action-btn" title="Toggle Theme">
@@ -313,11 +565,240 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Other Scripts -->
+    <!-- ================= CUSTOM MOBILE INSTALL & NOTIFICATION OVERLAY ================= -->
+    <div id="mobileInstallOverlay" class="mobile-install-overlay">
+        <div class="mobile-install-modal">
+            <button id="modalCloseBtn" class="modal-close-btn" title="Close"><i class="fa-solid fa-xmark"></i></button>
+            <span class="install-tag">INSTALL APP</span>
+            <h3 class="install-title">Add to Home Screen</h3>
+            
+            <div class="install-hero-block">
+                <div class="install-icon-box">
+                    <i class="fa-solid fa-mobile-screen"></i>
+                </div>
+                <p class="install-desc">
+                    Get a <strong>native app-like experience</strong> — faster access, no browser chrome, works offline, and immediate live push updates.
+                </p>
+            </div>
+
+            <div class="notification-toggle-box" id="notifToggleBox">
+                <input type="checkbox" id="enableNotificationsCheck" checked>
+                <label for="enableNotificationsCheck" class="notification-label">
+                    Notify me for <span>every new content</span> posted
+                </label>
+            </div>
+
+            <button id="primaryInstallBtn" class="install-primary-btn">
+                <i class="fa-solid fa-circle-down"></i> ADD TO HOME SCREEN
+            </button>
+
+            <div class="install-actions-row">
+                <button id="btnLater" class="btn-later">LATER</button>
+                <button id="btnInstallDirect" class="btn-install-secondary">INSTALL</button>
+            </div>
+
+            <div class="install-footer">
+                Masthi Updates • Free • Ultra fast access
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Update Notification Toast -->
+    <div id="appLiveAlert" class="app-live-alert">
+        <i class="fa-solid fa-bell" style="color: var(--primary-gold);"></i>
+        <span id="liveAlertText">New Content Posted!</span>
+        <a id="liveAlertLink" href="/" style="text-decoration: underline; font-weight: bold; margin-left: 5px;">Read</a>
+    </div>
+
+    <!-- Other Scripts & PWA Service Worker Logic -->
     <script>
-        // Notification Bell Click
-        document.getElementById('notifBtn')?.addEventListener('click', function () {
-            alert('Notifications feature coming soon! \u26a1\n\nStay tuned for:\n\u2022 Breaking news alerts\n\u2022 New release notifications\n\u2022 Personalized updates');
+        // PWA Installation & Notification logic
+        let deferredPrompt;
+        const mobileInstallOverlay = document.getElementById('mobileInstallOverlay');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const primaryInstallBtn = document.getElementById('primaryInstallBtn');
+        const btnLater = document.getElementById('btnLater');
+        const btnInstallDirect = document.getElementById('btnInstallDirect');
+        const installTriggerBtn = document.getElementById('installTriggerBtn');
+        const enableNotificationsCheck = document.getElementById('enableNotificationsCheck');
+        const notifToggleBox = document.getElementById('notifToggleBox');
+
+        // Allow toggling clicking on the whole box
+        if (notifToggleBox) {
+            notifToggleBox.addEventListener('click', (e) => {
+                if (e.target !== enableNotificationsCheck) {
+                    enableNotificationsCheck.checked = !enableNotificationsCheck.checked;
+                }
+            });
+        }
+
+        function showInstallPrompt() {
+            if (mobileInstallOverlay) {
+                mobileInstallOverlay.classList.add('active');
+            }
+        }
+
+        function hideInstallPrompt() {
+            if (mobileInstallOverlay) {
+                mobileInstallOverlay.classList.remove('active');
+            }
+        }
+
+        // Trigger manual display via App button
+        if (installTriggerBtn) {
+            installTriggerBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                showInstallPrompt();
+            });
+        }
+
+        if (modalCloseBtn) modalCloseBtn.addEventListener('click', hideInstallPrompt);
+        if (btnLater) {
+            btnLater.addEventListener('click', () => {
+                hideInstallPrompt();
+                localStorage.setItem('masthi_app_install_dismissed', Date.now());
+            });
+        }
+
+        // Intercept standard PWA beforeinstallprompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later.
+            deferredPrompt = e;
+            
+            // If the user hasn't dismissed it recently, auto show on mobile screens
+            const lastDismissed = localStorage.getItem('masthi_app_install_dismissed');
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isMobile && (!lastDismissed || (Date.now() - lastDismissed > 24 * 60 * 60 * 1000))) {
+                setTimeout(showInstallPrompt, 2500);
+            }
         });
+
+        async function handleInstallAction() {
+            // Request Notification permissions if checkbox is checked
+            if (enableNotificationsCheck && enableNotificationsCheck.checked) {
+                try {
+                    const permission = await Notification.requestPermission();
+                    if (permission === 'granted') {
+                        subscribeUserToPush();
+                    }
+                } catch(err) {
+                    console.error('Failed to request notification permission', err);
+                }
+            }
+
+            // Trigger actual app installation
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User choice outcome: ${outcome}`);
+                deferredPrompt = null;
+            } else {
+                // If the prompt is not available, show a nice instructional alert
+                if (navigator.userAgent.toLowerCase().includes('iphone') || navigator.userAgent.toLowerCase().includes('ipad')) {
+                    alert('To install on iOS: tap the Share button below and select "Add to Home Screen".');
+                } else if (enableNotificationsCheck && enableNotificationsCheck.checked) {
+                    // Just enable notifications if prompt wasn't deferred
+                    alert('Notifications enabled successfully! \u2705');
+                } else {
+                    alert('App installation is available from your browser menu ("Add to Home Screen" or "Install App").');
+                }
+            }
+            hideInstallPrompt();
+        }
+
+        if (primaryInstallBtn) primaryInstallBtn.addEventListener('click', handleInstallAction);
+        if (btnInstallDirect) btnInstallDirect.addEventListener('click', handleInstallAction);
+
+        // Register Service Worker & Check Live Posts
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registered successfully with scope: ', registration.scope);
+                        
+                        // If notification permission is already granted, periodically check for new content
+                        if (Notification.permission === 'granted') {
+                            subscribeUserToPush();
+                            // Initial check
+                            if (registration.active) {
+                                registration.active.postMessage({ type: 'CHECK_LATEST_POST' });
+                            }
+                            // Set interval to check every 2 minutes while page is open
+                            setInterval(() => {
+                                if (registration.active) {
+                                    registration.active.postMessage({ type: 'CHECK_LATEST_POST' });
+                                }
+                            }, 120000);
+                        }
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+
+        // Save push subscription to server fallback logic
+        async function subscribeUserToPush() {
+            try {
+                const reg = await navigator.serviceWorker.ready;
+                // If real web push standard VAPID is ever integrated, reg.pushManager.subscribe can be used here.
+                // For now, save current endpoint support or fallback locally.
+                if (reg.active) {
+                    reg.active.postMessage({ type: 'CHECK_LATEST_POST' });
+                }
+                
+                // Let's also set up subscription via standard push manager if supported without applicationServerKey as soft subscription
+                try {
+                    const sub = await reg.pushManager.getSubscription();
+                    if (sub) {
+                        await fetch('/save-subscription/', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(sub)
+                        });
+                    }
+                } catch(e){}
+            } catch(e){
+                console.error('Error during push check', e);
+            }
+        }
+
+        // Client-side fallback polling to update in-app UI banner for new posts
+        let lastSeenPostId = null;
+        async function pollLatestPostUI() {
+            try {
+                const res = await fetch('/latest-post/');
+                const data = await res.json();
+                if (data && data.success && data.id) {
+                    if (lastSeenPostId === null) {
+                        lastSeenPostId = data.id; // initial load
+                    } else if (lastSeenPostId !== data.id) {
+                        lastSeenPostId = data.id;
+                        // Trigger in-app live alert banner
+                        const appLiveAlert = document.getElementById('appLiveAlert');
+                        const liveAlertText = document.getElementById('liveAlertText');
+                        const liveAlertLink = document.getElementById('liveAlertLink');
+                        if (appLiveAlert && liveAlertText && liveAlertLink) {
+                            liveAlertText.textContent = `New post: "${data.title}"`;
+                            liveAlertLink.href = `/blogs/${data.slug}/`;
+                            appLiveAlert.classList.add('show');
+                            setTimeout(() => {
+                                appLiveAlert.classList.remove('show');
+                            }, 8000);
+                        }
+                    }
+                }
+            } catch(e){}
+        }
+
+        // Poll every 45 seconds for client-side live UI updates
+        setTimeout(() => {
+            pollLatestPostUI();
+            setInterval(pollLatestPostUI, 45000);
+        }, 3000);
     </script>
 
 </body>
