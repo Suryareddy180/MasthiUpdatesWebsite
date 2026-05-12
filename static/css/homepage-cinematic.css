@@ -940,6 +940,10 @@ body:not(.dark-mode) .hero-description {
     text-shadow: none;
 }
 
+body:not(.dark-mode) .header-top h2 {
+    color: #1a1a1a;
+}
+
 body:not(.dark-mode) .section-tagline {
     color: #666;
 }
@@ -961,9 +965,13 @@ body:not(.dark-mode) .article-premium-card {
 }
 
 body:not(.dark-mode) .article-premium-card:hover {
-    box-shadow: none;
-    /* Cleaner look for light mode */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     border-bottom-color: var(--primary-gold);
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin: -1.5rem;
+    transition: all 0.3s ease;
 }
 
 body:not(.dark-mode) .meta-item {
@@ -971,14 +979,25 @@ body:not(.dark-mode) .meta-item {
 }
 
 body:not(.dark-mode) .empty-state-card {
+    background: #fff;
+    border: 2px dashed rgba(255, 193, 7, 0.6);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     color: #333;
 }
 
+body:not(.dark-mode) .empty-state-card h3 {
+    color: #1a1a1a;
+    font-weight: 800;
+}
+
+body:not(.dark-mode) .empty-state-card p {
+    color: #666;
+}
+
 body:not(.dark-mode) .widget-box {
-    background: rgba(255, 255, 255, 0.7);
-    /* Frosted Glass Light */
-    border-color: rgba(0, 0, 0, 0.05);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
 }
 
 body:not(.dark-mode) .widget-heading {
@@ -987,6 +1006,15 @@ body:not(.dark-mode) .widget-heading {
 }
 
 body:not(.dark-mode) .widget-body p {
+    color: #555;
+}
+
+body:not(.dark-mode) .cta-content h4 {
+    color: #1a1a1a;
+    font-weight: 800;
+}
+
+body:not(.dark-mode) .cta-content p {
     color: #555;
 }
 
