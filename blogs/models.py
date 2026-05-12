@@ -33,6 +33,21 @@ def blog_image_upload_path(instance, filename):
     )
 
 
+def blog_video_upload_path(instance, filename):
+    ext = filename.split('.')[-1]
+    title_slug = slugify(instance.title)
+    now = datetime.now()
+
+    filename = f"video-{title_slug}-{now.strftime('%d%m%Y-%H%M%S')}.{ext}"
+
+    return os.path.join(
+        'blog_videos',
+        now.strftime('%Y'),
+        now.strftime('%m'),
+        filename
+    )
+
+
 STATUS_CHOICES = (
     ("Draft", "Draft"),
     ("Published", "Published"),
@@ -53,6 +68,13 @@ class Blog(models.Model):
         upload_to=blog_image_upload_path,
         blank=True,
         null=True
+    )
+
+    video = models.FileField(
+        upload_to=blog_video_upload_path,
+        blank=True,
+        null=True,
+        help_text="Upload a video file (MP4, WebM, etc.)"
     )
 
     short_description = models.TextField()

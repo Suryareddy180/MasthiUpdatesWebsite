@@ -17,7 +17,7 @@ def home(request):
     #     return redirect('dashboard')
     
     featured_posts=Blog.objects.filter(is_featured=True,status='Published').order_by('-created_at','-updated_at')
-    posts = Blog.objects.filter(is_featured=False,status='Published').order_by('-created_at','-updated_at')
+    posts = Blog.objects.filter(status='Published').order_by('-created_at','-updated_at')
     
     # Get About info from database
     about = About.objects.first()

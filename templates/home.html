@@ -84,6 +84,13 @@
         <div class="articles-showcase">
             {% for post in posts %}
             <article class="article-premium-card">
+                {% if post.video %}
+                <div class="article-video-box" style="background: #000; border-radius: 16px 16px 0 0; overflow: hidden;">
+                    <video controls preload="metadata" style="width: 100%; max-height: 250px; display: block;">
+                        <source src="{{ post.video.url }}" type="video/mp4">
+                    </video>
+                </div>
+                {% else %}
                 <a href="{% url 'blogs' post.slug %}" class="article-visual">
                     {% if post.feature_image %}
                     <img src="{{ post.feature_image.url }}" alt="{{ post.title }}" loading="lazy">
@@ -100,6 +107,7 @@
                         <span class="view-icon"><i class="fa-solid fa-arrow-right"></i></span>
                     </div>
                 </a>
+                {% endif %}
                 <div class="article-details">
                     <div class="article-metadata">
                         <span class="meta-item">
